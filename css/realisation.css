@@ -102,6 +102,7 @@
         /* Assure que chaque projet s'arrête net au centre lors du défilement */
         scroll-snap-type: x mandatory; 
         gap: 20px; 
+        border-radius: var(--border-m);
     }
     
     /* Pour cacher la barre de défilement sur Webkit (Chrome, Safari) */
@@ -110,8 +111,8 @@
     }
     
     .projet-fiche {
-        min-width: 300px; 
-        height: 520px;
+        min-width: 310px; 
+        height: 500px;
         /* Positionne l'arrêt de défilement au centre de l'élément */
         scroll-snap-align: center; 
         margin-bottom: 0; 
