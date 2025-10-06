@@ -60,7 +60,7 @@
 
 
 .projet-detail {
-    padding: 1.5rem;
+    padding: 20px;
     background-color: white;
 }
 
@@ -72,6 +72,9 @@
 .projet-detail p {
     
     color: black;
+}
+.projet-detail a {
+    text-decoration: none;
 }
 .appel-action {
     background-color: var(--accent-color);

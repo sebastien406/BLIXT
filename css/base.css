@@ -303,6 +303,9 @@ filter: drop-shadow(0 0 15px white) drop-shadow(0 0 30px white);
     font-size: 100px;
     color: var(--accent-color);
 }
+.modale-fermer:hover {
+    cursor: pointer;
+}
 .modale-interieur .btn-contact {
     margin: 600px;
 }
