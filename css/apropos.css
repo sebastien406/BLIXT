@@ -71,7 +71,7 @@
 }
 
 .histoire-texte {
-    padding: 40px;
+    padding: 40px ;
     border-radius: var(--border-m);
     border: solid 1px var(--accent-color);
     transform: rotate(2deg);
@@ -240,7 +240,7 @@
     }
     .section-histoire {
         margin: auto;
-        padding: 40px;
+        padding: 40px 0px;
     }
     .histoire-grille {
         gap: 40px;
@@ -252,7 +252,7 @@
     }
     .histoire-texte {
         transform: rotate(0deg);
-        padding: 30px;
+        padding: 30px 0px;
         text-align: center;
     }
     .valeurs-certifs  {
