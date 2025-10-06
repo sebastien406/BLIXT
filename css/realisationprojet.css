@@ -1,0 +1,137 @@
+
+.entete-projet {
+    background:var(--accent-color);
+    color: var(--main-bg-color);
+    padding: 100px 0 30px 0 ;
+    text-align: center;
+}
+
+
+
+.details-projet {
+    background-color: var(--color-bg-light);
+    padding: 80px 0;
+    width: 90%;
+   margin: auto;
+}
+
+
+.details-grille {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 40px;
+}
+
+
+.details-bloc {
+    background-color: var(--color-white);
+    padding: 40px;
+    border-radius: var(--border-m);
+    box-shadow: var(--shadow-light);
+}
+
+.details-bloc h3 {
+   
+    color: var(--main-bg-color);
+}
+.details-bloc p {
+    margin-top: 20px;
+    color: var(--main-bg-color); 
+}
+
+.detail-titre {
+ 
+    color: var(--main-bg-color);
+}
+.galerie-projet {
+    padding: 50px 30px;
+    background:var(--accent-color);
+}
+
+.titre-galerie {
+    text-align: center;
+    margin-bottom: 40px;
+    color: var(--main-bg-color);
+}
+.galerie-grille {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 30px;
+    width: 90%;
+   margin: auto;
+}
+.galerie-image {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    border-radius: var(--border-m);
+    filter: drop-shadow(0 0 15px var(--main-bg-color)) drop-shadow(0 0 30px var(--main-bg-color));
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.galerie-image:hover {
+    transform: scale(1.02);
+    box-shadow: var(--shadow-hover);
+}
+.section-action {
+    text-align: center;
+    border-bottom: solid 2px var(--accent-color);
+    padding-bottom: 50px;
+    margin: 40px 0 0 0 ;
+}
+.section-action p {
+    margin-bottom: 40px;
+}
+.btn-contact {
+    margin-top: 100px;
+}
+
+
+@media (min-width: 768px) {
+    .details-grille {
+        grid-template-columns: 2fr 1fr; 
+    }
+    
+}
+@media (max-width: 767px) {
+    .entete-projet {
+         padding: 30px 15px;
+    }
+    .details-projet {
+        padding: 30px 10px;
+    }
+    .details-grille {
+        text-align: center;
+    }
+    .galerie-projet {
+        padding: 10px 10px 30px 10px;
+    }
+    .galerie-grille {
+        border-radius: var(--border-m);
+        box-shadow: var( --box-shadow);
+        display: flex; 
+        overflow-x: auto; 
+        scrollbar-width: none; 
+        -ms-overflow-style: none; 
+        -webkit-overflow-scrolling: touch; 
+        /* Force l'arrêt sur une image après le swipe */
+        scroll-snap-type: x mandatory; 
+        gap: 20px; 
+        /* Permet de centrer visuellement les images au début et à la fin */
+        padding-left: 5px; 
+        padding-right: 5px; 
+    }
+    .galerie-image {
+        width: 90vw; 
+        height: auto; 
+        /* Empêche l'image de se contracter dans le Flexbox */
+        flex-shrink: 0; 
+        scroll-snap-align: start; 
+        /* Assure que les marges ne cassent pas la largeur */
+        margin: 0; 
+    }
+.section-action {
+        padding: 0px 10px 50px 10px;
+    }
+}
+

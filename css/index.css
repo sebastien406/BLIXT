@@ -1,0 +1,198 @@
+.section-padding {
+    padding: 100px 0;
+}
+
+.titre-section { 
+    margin-bottom: 15px;
+    color: var(--accent-color);
+}
+
+
+.texte-centre { 
+    text-align: center;
+}
+
+.bouton { 
+    display: inline-block;
+    padding: 14px 30px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease-in-out;
+    letter-spacing: 0.5px;
+    border: none;
+    cursor: pointer;
+}
+ .bouton-decouverte { 
+    background: linear-gradient(90deg, var(--accent-color) 0%, var(--highlight-color) 100%);
+    color: var(--secondary-bg-color);
+    font-size: 1.2em;
+    padding: 18px 40px;
+    box-shadow: 0 0 25px rgba(0, 224, 255, 0.5);
+}
+.bouton-decouverte:hover { 
+    background: linear-gradient(90deg, var(--highlight-color) 0%, var(--accent-color) 100%);
+    transform: translateY(-5px);
+    
+}
+
+.section-visuelle-accueil { 
+    position: relative;
+    width: 100%;
+    height: 70vh; 
+    min-height: 500px;
+    overflow: hidden;
+}
+.conteneur-diaporama { 
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+.diapo { 
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+}
+.diapo.actif { 
+    opacity: 1;
+}
+
+.section-message-accroche { 
+    background-color: var(--secondary-bg-color);
+    color: var(--text-color);
+    padding: 30px 0 30px 0;
+    text-align: center;
+}
+.section-message-accroche p {
+    margin-bottom: 30px;
+}
+.bandeau-clients {
+    background-color: var(--accent-color);
+    overflow: hidden;
+    position: relative;
+ 
+}
+.curseur-clients { 
+    display: flex;
+    white-space: nowrap;
+    animation: scrollLogos 25s linear infinite;
+    width: fit-content;
+    padding-bottom: 30px;
+}
+.curseur-clients:hover { 
+    animation-play-state: paused;
+}
+h2 {
+    text-align: center; 
+    padding: 30px 0;
+    color: var(--secondary-bg-color);
+
+}
+.diapo-logos { 
+    display: flex;
+    align-items: center;
+}
+.diapo-logos img { 
+    height: 60px;
+    margin: 0 40px;
+    filter: grayscale(100%) opacity(0.7);
+    transition: filter 0.3s ease;
+}
+.diapo-logos img:hover { 
+    filter: grayscale(0%) opacity(1);
+}
+
+@keyframes scrollLogos {
+    from { transform: translateX(-100%); }
+    to { transform: translateX(100%); }
+}
+
+.section-a-propos { 
+    background-color: var(--secondary-bg-color);
+}
+.grille-a-propos {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  padding: 0 100px;
+    align-items: center;
+}
+.boite-image-a-propos {
+    display: flex;
+    justify-content: center;
+    
+}
+.image-a-propos{
+    width: 300px;
+    margin-bottom: -100px;
+    border-radius: var(--border-m);
+    border: solid 1px var(--accent-color);
+    filter: drop-shadow(0 0 1px var(--accent-color)) drop-shadow(0 0 10px var(--accent-color));
+    
+}
+.image-a-propos:hover { 
+    transform: scale(1.05);
+}
+.contenu-texte-a-propos p { 
+  
+    margin-bottom:10px;
+    color: var(--text-color);
+}
+.contenu-texte-a-propos .titre-section { 
+    color: var(--accent-color);
+   
+}
+
+.section-carte { 
+    background-color: var(--secondary-bg-color);
+}
+.conteneur-carte { 
+    width: 100%;
+    border-radius: var(--border-m);
+    overflow: hidden;
+    box-shadow: var(--box-shadow);
+    border: 1px solid var(--accent-color);
+}
+.conteneur-carte iframe { 
+    display: block;
+}
+
+
+
+@media (max-width: 768px) {
+    .section-visuelle-accueil { 
+        height: 350px; 
+        min-height: 250px;
+    }
+    .section-message-accroche { 
+        padding: 20px 10px;
+    }
+    .section-message-accroche p {
+        margin-bottom: 15px;
+    }
+    .bandeau-clients h2 {
+        padding: 15px 0 10px 0;
+    }
+    .diapo-logos img { 
+        height: 35px; 
+        margin: 0 10px; 
+    }
+
+    .grille-a-propos {
+        grid-template-columns: 1fr; 
+        gap: 20px; 
+        text-align: center;
+        padding: 0 20px ;
+        margin-top: 40px;
+    }
+    .section-carte {
+        padding: 40px 20px;
+    }
+    .image-a-propos {
+        width: 180px;
+        margin: auto;
+    }
+}

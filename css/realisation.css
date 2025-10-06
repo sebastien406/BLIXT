@@ -1,0 +1,207 @@
+.entete-page {
+    background-color: var(--accent-color);
+    padding: 100px 0 30px 0;
+    text-align: center;
+}
+
+.entete-page h1 {
+    color: black;
+   
+}
+
+.entete-page p {
+  color: black;
+}
+
+.galerie-projets {
+    padding: 4rem 5%;
+    margin: 0 auto;
+    max-width: 1200px;
+}
+.projet-fiche {
+    background-color: var(--secondary-bg-color);
+    border-radius: var(--border-m);
+    overflow: hidden;
+    margin-bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+    border: solid 5px var(--accent-color);
+    transition: transform 0.3s ease;
+    max-width: 900px;
+    width: 100%;
+    filter: drop-shadow(0 0 1px var(--accent-color)) drop-shadow(0 0 10px var(--accent-color));
+}
+
+.projet-fiche:hover {
+    transform: scale(1.02);
+}
+.carrousel-images {
+    width: 100%;
+    height: 300px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 0 80px rgba(0, 0, 0, 1);
+}
+
+.defilement-photos {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.5s ease-in-out;
+}
+
+.defilement-photos img {
+    min-width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    box-shadow: 0 0 80px rgba(0, 0, 0, 1);
+}
+
+
+.projet-detail {
+    padding: 1.5rem;
+    background-color: white;
+}
+
+.projet-detail h3 {
+    
+    color: var(--highlight-color);
+}
+
+.projet-detail p {
+    
+    color: black;
+}
+.appel-action {
+    background-color: var(--accent-color);
+    padding: 30px 0 30px 0;
+    text-align: center;
+    color: var(--main-bg-color);
+}
+
+.appel-action h2 {
+   
+    color: var(--main-bg-color);
+}
+
+
+@media (max-width: 768px) {
+    .entete-page {
+        padding: 30px 15px;
+    }
+    .appel-action {
+        padding: 10px 10px;
+    }
+    .galerie-projets .conteneur {
+        display: flex; 
+        overflow-x: auto; 
+        scrollbar-width: none; 
+        -ms-overflow-style: none; 
+        -webkit-overflow-scrolling: touch;
+        /* Assure que chaque projet s'arrête net au centre lors du défilement */
+        scroll-snap-type: x mandatory; 
+        gap: 20px; 
+    }
+    
+    /* Pour cacher la barre de défilement sur Webkit (Chrome, Safari) */
+    .galerie-projets .conteneur::-webkit-scrollbar {
+        display: none;
+    }
+    
+    .projet-fiche {
+        min-width: 300px; 
+        height: 520px;
+        /* Positionne l'arrêt de défilement au centre de l'élément */
+        scroll-snap-align: center; 
+        margin-bottom: 0; 
+    }
+     .projet-detail {
+        text-align: center;
+    }
+}
+/* --- GESTION DE LA RESPONSIVITÉ (Desktop et Tablette) --- */
+@media (min-width: 769px) {
+    .projects-gallery .container {
+        /* Annule les styles flex pour le défilement horizontal appliqués en mobile */
+        display: block; 
+    }
+    
+    .project-item {
+        flex-direction: row; /* Aligne l'image et le texte côte à côte */
+        width: 100%;
+        max-width: 1000px;
+        margin-top: 4rem;
+        /* Les images et infos prennent 50% de la largeur du projet */
+    }
+    
+    .project-item:first-of-type {
+        margin-top: 0;
+    }
+    
+    /* Décalage des projets PAIRS vers la droite */
+    .project-item:nth-child(even) {
+        flex-direction: row-reverse;
+        margin-left: auto;
+        margin-right: -250px; 
+    }
+    
+    /* Décalage des projets IMPAIRS vers la gauche */
+    .project-item:nth-child(odd) {
+        margin-right: auto;
+        margin-left: -250px; 
+    }
+    .project-carousel-container,
+    .project-info {
+        width: 50%;
+    }
+
+    .project-info {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .galerie-projets .conteneur {
+        display: block; 
+    }
+    
+    .projet-fiche {
+        flex-direction: row;
+        width: 100%;
+        max-width: 1000px;
+        margin-top: 4rem;
+    }
+     .projet-fiche > a { 
+        width: 50%;
+        display: flex; 
+    }
+    
+    .projet-fiche:first-of-type {
+        margin-top: 0;
+    }
+    
+   
+    .projet-fiche:nth-child(even) {
+        flex-direction: row-reverse;
+        margin-left: auto;
+        margin-right: -250px;
+    }
+    
+   
+    .projet-fiche:nth-child(odd) {
+        margin-right: auto;
+        margin-left: -250px; 
+    }
+    
+    .carrousel-images,
+    .projet-detail {
+        width: 100%;
+    }
+
+    .projet-detail {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+}

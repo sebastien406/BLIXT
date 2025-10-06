@@ -1,0 +1,189 @@
+.conteneur {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 0 25px;
+   
+}
+
+.titre-section {
+   color: var(--text-color);
+    text-align: center;
+
+}
+
+.sous-titre-section {
+    text-align: center;
+    color: var(--text-color);
+    max-width: 800px;
+    margin: 0 auto 50px auto;
+  
+}
+
+
+.entete-services {
+    padding: 100px 0 30px 0;
+    position: relative;
+    overflow: hidden;
+    background-color: var(--accent-color);
+}
+
+.entete-services .conteneur-titre {
+    position: relative;
+    z-index: 2;
+}
+
+
+.entete-services h1 {
+
+    text-align: center;
+ 
+    color: var(--main-bg-color);
+   
+}
+
+.entete-services p {
+    text-align: center;
+   
+   color: var(--main-bg-color);
+}
+
+
+.liste-services {
+    padding: 80px 0;
+    background-color: var(--main-bg-color);
+}
+
+.grille-services {
+    display: grid;
+    /* grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); */
+    gap: 80px;
+    grid-template-columns: 1fr 1fr 1fr ;
+    justify-items: center;
+    padding: 0px 400px;
+    
+}
+
+.carte-service {
+    width: 350px;
+    background-color: var(--color-white);
+    padding: 40px;
+    border-radius: var(--border-m);
+    box-shadow: var(--shadow-light);
+    text-align: center;
+    transition: all 0.3s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    filter: drop-shadow(0 0 1px var(--accent-color)) drop-shadow(0 0 10px var(--accent-color));
+}
+
+.carte-service:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: var(--shadow-hover);
+    border-color: var(--color-accent);
+}
+
+.icone-carte {
+    background: linear-gradient(45deg, var(--main-bg-color) 0%, var( --secondary-bg-color) 100%);
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 25px auto;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.icone-service {
+    width: 50px;
+    height: 50px;
+    filter: invert(100%);
+}
+
+.carte-service h3 {
+  
+    color: var(--main-bg-color);
+   
+}
+
+.carte-service p {
+   
+    color: var(--main-bg-color);
+    flex-grow: 1;
+}
+
+.bande-appel-action {
+    background-color: var(--accent-color);
+    color: var(--main-bg-color);
+    text-align: center;
+    padding: 30px 0 30px 0;
+
+}
+
+.bande-appel-action {
+    color: var(--main-bg-color);
+   
+}
+
+
+@media (max-width: 767px) {
+    .conteneur {
+        padding: 0 15px;
+    }
+   .entete-services {
+        padding: 30px 30px;
+        text-align: center;
+    }
+    .icone-carte {
+        width: 80px;
+        height: 80px;
+    }
+    .icone-service {
+        width: 40px;
+        height: 40px;
+    }
+
+    .bande-appel-action {
+        padding: 10px 10px;
+    }
+    .bouton-principal {
+        font-size: 1.1em;
+        padding: 15px 30px;
+    }
+    .liste-services {
+        padding: 30px 0px; 
+    }
+
+    
+    .grille-services {
+       display: flex; 
+        flex-wrap: nowrap; 
+        overflow-x: auto; 
+        /* Assure que les cartes s'arrêtent net (effet carrousel) */
+        scroll-snap-type: x mandatory; 
+        /* Cacher la barre de défilement */
+        scrollbar-width: none; 
+        -ms-overflow-style: none;
+        gap: 30px; 
+         /* Améliore le défilement tactile */
+        -webkit-overflow-scrolling: touch;
+        border-radius: var(--border-m);
+        padding: 0 0px;
+  
+    }
+    /* Cacher la barre de défilement pour les navigateurs Webkit (Chrome, Safari) */
+    .grille-services::-webkit-scrollbar {
+        display: none;
+    }
+    
+    .carte-service { 
+        min-width: 200px;
+        width: 300px; 
+        flex-shrink: 0; /* Empêche les cartes de rétrécir */
+        /* Positionne l'arrêt de défilement au centre de l'écran */
+        scroll-snap-align: center; 
+        margin: 10px 20px;
+    }
+}
+
