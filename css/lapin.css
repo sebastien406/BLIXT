@@ -1,0 +1,551 @@
+/*
+|--------------------------------------------------------------------------
+| LA TEAM CASSE GRAIN CSS - VERSION STATIQUE (HTML/CSS)
+|--------------------------------------------------------------------------
+| Classes nommées en français, structure mobile-first.
+*/
+
+/* --- 1. Variables et Global Reset --- */
+:root {
+    --couleur-fond-principal: #121212;
+    --couleur-primaire: #55ff00; /* Vert Fluorescent */
+    --couleur-secondaire: #00BFFF; /* Bleu électrique */
+    --couleur-texte: #FFFFFF;
+    --couleur-fond-carte: #1C1C1C;
+    --largeur-max: 1280px;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--couleur-fond-principal);
+    color: var(--couleur-texte);
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* Réinitialisation de base */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+/* --- 2. Utilitaires & Effets Spéciaux --- */
+.conteneur {
+    max-width: 80%;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.texte-centre { text-align: center; }
+.majuscule { text-transform: uppercase; }
+
+/* Classe générique pour les images qui doivent s'adapter à la largeur du conteneur */
+.image-responsive {
+    max-width: 100%;
+    height: auto;
+    display: block; /* Évite les espaces sous l'image */
+}
+
+/* Effet Néon sur les titres */
+.titre-neon {
+    filter: drop-shadow(0 0 1px var(--couleur-texte)) drop-shadow(0 0 5px rgba(85, 255, 0, 0.4));
+}
+
+/* --- 3. Header & Navigation --- */
+.entete {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 50;
+    padding: 1rem 0;
+    background-color: var(--couleur-fond-principal);
+    border-bottom: 1px solid rgba(85, 255, 0, 0.18);
+}
+
+.entete-contenu {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo-conteneur {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    gap: 0.5rem;
+    text-decoration: none;
+}
+
+/* Gestion des images de logo */
+.logo-symbole {
+    display: inline-block;
+    filter: drop_shadow(0 0 4px var(--couleur-primaire));
+}
+.logo-symbole img {
+    width: 40px; /* Taille du logo dans le header (fixe) */
+    height: auto;
+}
+
+.logo-texte {
+    font-size: 1.5rem;
+    font-weight: 900;
+    letter-spacing: 0.1em;
+    color: var(--couleur-primaire);
+    text-shadow: 0 0 5px rgba(85, 255, 0, 0.5); 
+}
+
+.navigation-bureau {
+    display: none; /* Caché par défaut (Mobile) */
+    gap: 1.5rem;
+}
+
+.lien-nav {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--couleur-texte);
+    text-decoration: none;
+    transition: color 0.3s;
+}
+.lien-nav:hover, .lien-nav.actif {
+    color: var(--couleur-secondaire) !important;
+    border-bottom: 2px solid var(--couleur-secondaire);
+    padding-bottom: 0.125rem;
+}
+
+/* Bouton Burger Mobile */
+.bouton-burger {
+    z-index: 60;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0.5rem;
+    display: block; 
+}
+.barre-burger {
+    width: 24px;
+    height: 3px;
+    margin: 5px 0;
+    background-color: var(--couleur-primaire);
+    transition: all 0.3s;
+}
+
+/* Menu Mobile (Plein écran) */
+.menu-ouvert .bouton-burger .barre-burger:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+.menu-ouvert .bouton-burger .barre-burger:nth-child(2) { opacity: 0; }
+.menu-ouvert .bouton-burger .barre-burger:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+.menu-ouvert .navigation-bureau {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: var(--couleur-fond-principal);
+    z-index: 55;
+    align-items: center;
+    justify-content: center;
+    gap: 3rem;
+    transform: translateX(0);
+}
+.menu-ouvert .navigation-bureau .lien-nav {
+    font-size: 2.25rem;
+    text-shadow: 0 0 10px rgba(85, 255, 0, 0.5);
+    border-bottom: none !important;
+}
+
+
+/* --- 4. Boutons Néon --- */
+.bouton-neon {
+    padding: 0.75rem 2rem;
+    border-radius: 9999px;
+    font-size: 1.125rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    text-decoration: none;
+    display: inline-block;
+}
+.bouton-neon:hover {
+    transform: scale(1.05);
+}
+
+/* Primaire (Vert Fluo) */
+.bouton-primaire {
+    background-color: rgba(85, 255, 0, 0.06);
+    color: var(--couleur-primaire);
+    border: 2px solid var(--couleur-primaire);
+    box-shadow: 0 0 5px var(--couleur-primaire), 0 0 20px rgba(85, 255, 0, 0.5);
+}
+.bouton-primaire:hover {
+    background-color: rgba(85, 255, 0, 0.2);
+}
+
+/* Secondaire (Bleu) */
+.bouton-secondaire {
+    background-color: rgba(0, 191, 255, 0.06);
+    color: var(--couleur-secondaire);
+    border: 2px solid var(--couleur-secondaire);
+    box-shadow: 0 0 5px var(--couleur-secondaire), 0 0 20px rgba(0, 191, 255, 0.5);
+}
+.bouton-secondaire:hover {
+    background-color: rgba(0, 191, 255, 0.2);
+}
+
+/* --- 5. Sections Générales --- */
+main {
+    padding-top: 64px; 
+}
+.section {
+    position: relative;
+    padding: 5rem 0;
+}
+.section-fond-carte { 
+    background-color: var(--couleur-fond-carte);
+}
+
+/* Conteneur de titre standardisé */
+.section-titre-wrapper { 
+    margin-bottom: 4rem;
+    padding: 0 1rem;
+    text-align: center;
+}
+
+.titre-section-icone {
+    display: inline-block;
+    padding: 0.75rem;
+    border-radius: 50%;
+    margin-bottom: 1rem;
+    border: 1px solid;
+    font-size: 1.5rem;
+}
+/* Styles spécifiques par couleur */
+.icone-primaire {
+    color: var(--couleur-primaire);
+    border-color: var(--couleur-primaire);
+    background-color: rgba(85, 255, 0, 0.1);
+}
+.icone-secondaire {
+    color: var(--couleur-secondaire);
+    border-color: var(--couleur-secondaire);
+    background-color: rgba(0, 191, 255, 0.1);
+}
+
+.titre-section {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 0.75rem;
+}
+.sous-titre-section {
+    font-size: 1.125rem;
+    color: #ccc;
+    max-width: 48rem;
+    margin: 0 auto;
+    margin-bottom: 1rem; 
+}
+
+.separateur-section {
+    width: 4rem;
+    height: 3px;
+    margin: 1rem auto 0;
+}
+
+/* --- 6. Section Accueil (Hero) --- */
+.section-accueil {
+    min-height: 100vh;
+    padding-top: 6rem;
+    padding-bottom: 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* IMAGE ACCUEIL: Petite par défaut, grande sur desktop */
+.image-accueil-conteneur {
+    max-width: 250px; /* Petite sur mobile */
+    margin: 0 auto 2rem;
+}
+
+.titre-accueil {
+    font-size: 2.5rem; /* Mobile */
+    font-weight: 900;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+    position: relative;
+    z-index: 10;
+}
+
+.boutons-accueil {
+    display: flex;
+    flex-direction: column; /* Empilement sur mobile */
+    justify-content: center;
+    gap: 1.5rem;
+    position: relative;
+    z-index: 10;
+}
+
+/* Code Background Animation */
+.fond-code {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    opacity: 0.1;
+    pointer-events: none;
+    line-height: 1.5;
+    font-size: 0.75rem;
+    color: #666;
+    animation: fond-impulsion 4s infinite alternate;
+}
+.grille-code {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transform: scale(1.5);
+    padding: 0;
+    margin: 0;
+    visibility: hidden; 
+}
+
+@keyframes fond-impulsion {
+    from { opacity: 0.05; }
+    to { opacity: 0.15; }
+}
+
+/* --- 7. Images de section spécifiques (Lapin Garde et Contact) --- */
+.lapin-garde-conteneur {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+/* LAPINS GARDES: Petits par défaut, grands sur desktop */
+.image-lapin-garde {
+    width: 150px; /* Très petits sur mobile */
+    height: auto;
+}
+
+/* LAPIN CONTACT: Petit par défaut, grand sur desktop */
+.image-contact-conteneur {
+    max-width: 250px; /* Petit sur mobile */
+    margin: 2rem auto;
+}
+
+
+/* --- 8. Cartes de Service & Projet (Grilles) --- */
+.grille-services {
+    margin-top: 50px; 
+    display: grid;
+    /* Une seule colonne par défaut (Mobile) */
+    grid-template-columns: 1fr; 
+    gap: 2rem;
+}
+
+.carte-service {
+    padding: 1.5rem;
+    border-radius: 1rem;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    background-color: var(--couleur-fond-carte);
+    border: 2px solid transparent;
+    transition: all 0.5s ease-in-out;
+}
+.carte-service:hover {
+    transform: scale(1.03);
+    border-color: var(--couleur-primaire);
+    box-shadow: 0 0 10px var(--couleur-primaire), 0 0 25px rgba(85, 255, 0, 0.5);
+}
+.carte-entete {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+.icone-conteneur {
+    padding: 0.75rem;
+    border-radius: 9999px;
+    border: 1px solid;
+    font-size: 1.25rem;
+}
+.carte-service h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+/* Cartes de Projet (similaires aux services pour la grille) */
+.carte-projet {
+    background-color: var(--couleur-fond-carte);
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+    border: 2px solid rgba(0, 191, 255, 0.18);
+    transition: transform 0.5s;
+}
+.carte-projet:hover {
+    transform: scale(1.01);
+}
+/* IMAGES DE PROJET: Petite hauteur par défaut, grande sur desktop */
+.image-projet {
+    height: 10rem; /* Hauteur réduite sur mobile */
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    filter: grayscale(50%) brightness(80%);
+    transition: filter 0.5s ease;
+}
+/* Styles spécifiques pour les images de projet (pour le rendu visuel) */
+.image-projet-bleu { background-color: #00BFFF; }
+.image-projet-vert { background-color: #55ff00; }
+.image-projet-gris { background-color: #CCCCCC; }
+
+.image-projet h3 {
+    font-size: 1.3rem; /* Taille de titre réduite sur mobile */
+    font-weight: 800;
+    color: var(--couleur-texte);
+    padding: 0.75rem;
+    backdrop-filter: blur(2px);
+    border-radius: 0.25rem;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
+}
+.corps-projet {
+    padding: 1.5rem;
+}
+.liste-etiquettes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+.etiquette {
+    padding: 0.25rem 0.75rem;
+    font-size: 0.75rem;
+    border-radius: 9999px;
+    font-weight: 600;
+    background-color: rgba(85, 255, 0, 0.06);
+    color: var(--couleur-primaire);
+    border: 1px solid rgba(85, 255, 0, 0.3);
+}
+
+/* --- 9. Formulaire de Contact --- */
+.formulaire-contact {
+    max-width: 600px;
+    margin: 0 auto;
+}
+.formulaire-contact input, .formulaire-contact textarea {
+    width: 100%;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    background-color: var(--couleur-fond-principal);
+    border: 1px solid var(--couleur-fond-carte);
+    color: var(--couleur-texte);
+    transition: border-color 0.3s, box-shadow 0.3s;
+    margin-bottom: 1.5rem;
+    font-family: inherit;
+}
+.formulaire-contact input:focus, .formulaire-contact textarea:focus {
+    outline: none;
+    border-color: var(--couleur-primaire);
+    box-shadow: 0 0 0 2px var(--couleur-primaire);
+}
+.info-contact {
+    margin-top: 3rem;
+    color: #999;
+}
+
+/* --- 10. Pied de Page --- */
+.pied-page {
+    padding: 2rem;
+    background-color: var(--couleur-fond-principal);
+    border-top: 1px solid rgba(85, 255, 0, 0.125);
+}
+.pied-page p {
+    font-size: 0.875rem;
+    color: #666;
+}
+.logo-ligne-pied {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+.logo-ligne-pied .logo-symbole img {
+    width: 32px; /* Taille du logo dans le footer */
+}
+.logo-ligne-pied span:last-child {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--couleur-primaire);
+}
+
+/* --- 11. Media Queries (Réactivité) --- */
+
+/* Tablette et au-delà */
+@media (min-width: 768px) {
+    /* Navigation */
+    .navigation-bureau {
+        display: flex;
+    }
+    .bouton-burger {
+        display: none;
+    }
+    
+    /* Accueil */
+    .image-accueil-conteneur {
+        max-width: 800px; /* Grande sur tablette/desktop */
+    }
+    .titre-accueil {
+        font-size: 4rem;
+    }
+    .sous-titre-accueil {
+        font-size: 1.5rem;
+    }
+    .boutons-accueil {
+        flex-direction: row; /* Aligné sur une ligne */
+    }
+    .grille-code {
+        visibility: visible;
+    }
+
+    /* Images de section spécifiques */
+    .lapin-garde-conteneur {
+        gap: 600px;
+    }
+    .image-lapin-garde {
+        width: 800px; /* Grands sur tablette/desktop */
+    }
+    .image-contact-conteneur {
+        max-width: 800px; /* Grand sur tablette/desktop */
+    }
+
+    /* Grilles */
+    .grille-services {
+        margin-top: 100px; /* Marge standard sur grand écran */
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .titre-section {
+        font-size: 2.5rem;
+    }
+    .image-projet {
+        height: 20rem; /* Grande hauteur des images de projet */
+    }
+    .image-projet h3 {
+        font-size: 1.875rem; /* Taille de titre standard */
+    }
+}
+
+/* Ordinateur de bureau et au-delà */
+@media (min-width: 1024px) {
+    .grille-services {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    /* Les images restent aux tailles définies pour 768px+ ici,
+       mais vous pourriez les ajuster encore plus si besoin */
+}

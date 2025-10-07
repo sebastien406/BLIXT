@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Team Casse Grain - Le Lapin Développeur</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/lapin.css"> 
+</head>
+<body>
+
+    <header class="entete">
+        <div class="conteneur entete-contenu">
+            <a href="#accueil" class="logo-conteneur">
+                <span class="logo-symbole">
+                    <img src="images/logo lapin2.png" alt="Logo La Team Casse Grain">
+                </span>
+                <span class="logo-texte titre-neon">La Team Casse Grain</span>
+            </a>
+            
+            <nav class="navigation-bureau">
+                <a href="#accueil" class="lien-nav actif">Accueil</a>
+                <a href="#services" class="lien-nav">Services</a>
+                <a href="#realisations" class="lien-nav">Réalisations</a>
+                <a href="#contact" class="lien-nav">Contact</a>
+            </nav>
+            
+            <button class="bouton-burger" aria-label="Menu de navigation">
+                <div class="barre-burger"></div>
+                <div class="barre-burger"></div>
+                <div class="barre-burger"></div>
+            </button>
+        </div>
+    </header>
+
+    <main>
+        
+        <section id="accueil" class="section section-accueil">
+            <div class="fond-code">
+            </div>
+            <div class="conteneur texte-centre">
+                <div class="image-accueil-conteneur">
+                    <img src="pictures/lapingentilbureau.png" alt="Lapin gentil au bureau" class="image-responsive">
+                </div>
+                
+                <h1 class="titre-accueil titre-neon majuscule">
+                    Le code qui donne envie de croquer l'écran
+                </h1>
+                <p class="sous-titre-accueil">
+                    Votre site, c'est notre carotte. Laissez **La Team Casse Grain** construire votre présence numérique avec agilité, professionnalisme et une légère touche de folie.
+                </p>
+                <div class="boutons-accueil">
+                    <a href="#realisations" class="bouton-neon bouton-primaire">Voir les Projets</a>
+                    <a href="#contact" class="bouton-neon bouton-secondaire">Contacter un Lapin</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="services" class="section section-fond-carte">
+            <div class="conteneur">
+                <div class="section-titre-wrapper">
+                    <div class="lapin-garde-conteneur">
+                        <img src="pictures/lapinblancgdc.png" alt="Lapin garde du corps blanc" class="image-lapin-garde">
+                        <img src="pictures/lapinmarrongdc.png" alt="Lapin garde du corps marron" class="image-lapin-garde">
+                    </div>
+                    
+                    <h2 class="titre-section titre-neon">Nos Services Lapinesques</h2>
+                    
+                    <p class="sous-titre-section">Des solutions de développement agiles, rapides et sur mesure alors n'ayez pas peur !<br>
+                    Allez vas-y, clique, CLIQUE !</p>
+                    <div class="separateur-section" style="background-color: var(--couleur-primaire);"></div>
+                </div>
+
+                <div class="grille-services">
+                    <div class="carte-service">
+                        <div class="carte-entete">
+                            <div class="icone-conteneur icone-primaire">💻</div>
+                            <h3>Sites Web Sur-Mesure</h3>
+                        </div>
+                        <p>Développement de sites vitrines et e-commerce ultra-rapides, optimisés pour la conversion.</p>
+                    </div>
+                    <div class="carte-service">
+                        <div class="carte-entete">
+                            <div class="icone-conteneur icone-primaire">🥕</div>
+                            <h3>Optimisation & SEO</h3>
+                        </div>
+                        <p>On s'assure que Google vous trouve. Vitesse de chargement et référencement naturel au top.</p>
+                    </div>
+                    <div class="carte-service">
+                        <div class="carte-entete">
+                            <div class="icone-conteneur icone-primaire">🛡️</div>
+                            <h3>Maintenance et Support</h3>
+                        </div>
+                        <p>Nous veillons sur votre site comme des gardiens de terrier, 24/7. Mises à jour et sécurité garanties.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="realisations" class="section">
+            <div class="conteneur">
+                <div class="section-titre-wrapper">
+                    <span class="titre-section-icone icone-secondaire">💡</span>
+                    <h2 class="titre-section titre-neon">Nos Projets Fous-Fous</h2>
+                    <p class="sous-titre-section">De la petite carotte au projet géant : voici quelques-unes de nos créations.</p>
+                    <div class="separateur-section" style="background-color: var(--couleur-secondaire);"></div>
+                </div>
+
+                <div class="grille-services"> 
+                    <div class="carte-projet">
+                        <div class="image-projet image-projet-bleu">
+                            <h3>E-commerce Cyberpunk</h3>
+                        </div>
+                        <div class="corps-projet">
+                            <p>Plateforme de vente en ligne au design futuriste.</p>
+                            <div class="liste-etiquettes">
+                                <span class="etiquette">React</span>
+                                <span class="etiquette">Stripe</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="carte-projet">
+                        <div class="image-projet image-projet-vert">
+                            <h3>Canirando Tracker 🐕</h3>
+                        </div>
+                        <div class="corps-projet">
+                            <p>Application mobile de suivi GPS pour les randonnées avec chiens (canirando).</p>
+                            <div class="liste-etiquettes">
+                                <span class="etiquette">React Native</span>
+                                <span class="etiquette">Canirando</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="carte-projet">
+                        <div class="image-projet image-projet-gris">
+                            <h3>Portfolio 3D Interactif</h3>
+                        </div>
+                        <div class="corps-projet">
+                            <p>Portfolio avec un fond 3D pour une expérience unique.</p>
+                            <div class="liste-etiquettes">
+                                <span class="etiquette">Three.js</span>
+                                <span class="etiquette">WebGL</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <section id="contact" class="section section-fond-carte">
+            <div class="conteneur">
+                <div class="section-titre-wrapper">
+                    <h2 class="titre-section titre-neon">Contactez-nous</h2>
+                    <p class="sous-titre-section">Prêt à commencer votre projet ? Envoyez-nous un message, ne soyez pas timide,<br><strong> le lapin est gentil.</strong></p>
+                    
+                    <div class="image-contact-conteneur">
+                        <img src="pictures/lapinmechantbureau.png" alt="Lapin au bureau avec un air méchant" class="image-responsive">
+                    </div>
+                    <div class="separateur-section" style="background-color: var(--couleur-secondaire);"></div>
+                </div>
+                
+                <form class="formulaire-contact" action="#" method="POST">
+                    <input type="text" placeholder="Nom et Prénom" required>
+                    <input type="email" placeholder="Adresse E-mail" required>
+                    <textarea placeholder="Votre message..." rows="5" required></textarea>
+                    <button type="submit" class="bouton-neon bouton-primaire">Envoyer le Message</button>
+                </form>
+
+                <div class="info-contact texte-centre">
+                    <p>📧 Mail : contact@teamcassegrain.fr</p>
+                    <p>📍 Télétravail : Partout où le code est bon.</p>
+                </div>
+            </div>
+        </section>
+        
+    </main>
+
+    <footer class="pied-page texte-centre">
+        <div class="conteneur">
+            <p>&copy; 2025 La Team Casse Grain. Développé à la vitesse de la lumière.</p>
+            <div class="logo-ligne-pied">
+                <span class="logo-symbole">
+                     <img src="images/logo lapin2.png" alt="Logo La Team Casse Grain">
+                </span>
+                <span>#quette pas je gère</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.querySelector('.bouton-burger').addEventListener('click', function() {
+            document.body.classList.toggle('menu-ouvert');
+        });
+    </script>
+</body>
+</html>
