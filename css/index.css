@@ -102,28 +102,13 @@ h2 {
 
 .section-a-propos { 
     background-color: var(--secondary-bg-color);
+    width: 80%;
+  margin: auto;
 }
-.grille-a-propos {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-  padding: 0 100px;
-    align-items: center;
-}
-.boite-image-a-propos {
-    display: flex;
-    justify-content: center;
-    
-}
-.image-a-propos{
-    width: 300px;
-    margin-bottom: -100px;
-    border-radius: var(--border-m);
-    border: solid 1px var(--accent-color);
-    filter: drop-shadow(0 0 1px var(--accent-color)) drop-shadow(0 0 10px var(--accent-color));
-    
-}
-.image-a-propos:hover { 
-    transform: scale(1.05);
+
+.contenu-texte-a-propos {
+text-align: center;
+
 }
 .contenu-texte-a-propos p { 
   
@@ -132,7 +117,7 @@ h2 {
 }
 .contenu-texte-a-propos .titre-section { 
     color: var(--accent-color);
-   
+   text-align: center;
 }
 
 .section-carte { 

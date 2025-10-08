@@ -206,7 +206,13 @@ nav ul li a:hover {
     justify-content: space-between;
     max-width: 90%;
     margin: 0 auto;
-    gap: 2rem;
+    gap: 20px;
+}
+.footer-section-social h3 {
+   color: var(--text-color);
+    margin-bottom: 1rem;
+    font-size: 18px; 
+    text-align: center;
 }
 
 .footer-section {

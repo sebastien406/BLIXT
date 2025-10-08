@@ -38,13 +38,9 @@
     border-radius: var(--border-m);
     overflow: hidden;
     border: solid 1px var(--accent-color);
-    transform: rotate(-3deg);
-    transition: transform 0.4s ease-in-out;
     filter: var(--filter-noir);
 }
-.image-boite:hover {
-    transform: rotate(0deg) scale(1.02);
-}
+
 .image-histoire {
     width: 100%;
     height: 100%;
@@ -74,12 +70,8 @@
     padding: 40px ;
     border-radius: var(--border-m);
     border: solid 1px var(--accent-color);
-    transform: rotate(2deg);
-    transition: transform 0.4s ease-in-out;
 }
-.histoire-texte:hover {
-    transform: rotate(0deg);
-}
+
 .histoire-texte h2 {
     filter: drop-shadow(0 0 15px var(--accent-color)) drop-shadow(0 0 30px var(--accent-color));
 }
