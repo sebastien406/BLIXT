@@ -306,6 +306,7 @@ filter: drop-shadow(0 0 15px white) drop-shadow(0 0 30px white);
    filter: drop-shadow(0 0 15px var(--accent-color)) drop-shadow(0 0 30px var(--accent-color));
 }
 .modale-fermer {
+    display: flex;
     font-size: 100px;
     color: var(--accent-color);
 }
@@ -465,5 +466,8 @@ filter: drop-shadow(0 0 15px white) drop-shadow(0 0 30px white);
    .modale-interieur .btn-contact {
    margin: auto;
    align-items: center;
+}
+.modale-fermer {
+   font-size: 50px;
 }
 }

@@ -28,15 +28,6 @@
 }
 
 .grille-contact {
-    display: grid;
-    grid-template-columns: 1fr; 
-    gap: 40px;
-    background-color: var(--color-white);
-    padding: 50px;
-    border-radius: var(--border-m);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); 
-}
-.grille-contact {
   display: grid;
   gap: 40px;
   background-color: var(--main-bg-color);
@@ -96,7 +87,6 @@
 
 .carte-info-contact {
    margin: 20px 0 0 0px;
-   /* border-top: solid 1px var(--accent-color); */
    padding-top: 10px;
 }
 .bloc-info {
@@ -154,7 +144,7 @@
     padding: 30px 30px;
    }
    .grille-contact {
-    padding: 10px 10px;
+    width: 100%;
    }
    .groupe-formulaire input, .groupe-formulaire textarea {
   width: 100%;
@@ -166,7 +156,7 @@
   padding: 10px 10px;
 }
 .btn-contact {
-  margin-left: 30px;
+  margin: auto;
   }
   .bloc-info1 {
     text-align: center;

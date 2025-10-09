@@ -1,14 +1,14 @@
+
+
 .conteneur {
-    max-width: 100%;
+    max-width: 100%; 
     margin: 0 auto;
     padding: 0 25px;
-   
 }
 
 .titre-section {
-   color: var(--text-color);
+    color: var(--text-color);
     text-align: center;
-
 }
 
 .sous-titre-section {
@@ -16,7 +16,6 @@
     color: var(--text-color);
     max-width: 800px;
     margin: 0 auto 50px auto;
-  
 }
 
 
@@ -32,21 +31,11 @@
     z-index: 2;
 }
 
-
-.entete-services h1 {
-
-    text-align: center;
- 
-    color: var(--main-bg-color);
-   
-}
-
+.entete-services h1,
 .entete-services p {
     text-align: center;
-   
-   color: var(--main-bg-color);
+    color: var(--main-bg-color);
 }
-
 
 .liste-services {
     padding: 80px 0;
@@ -55,16 +44,16 @@
 
 .grille-services {
     display: grid;
-    /* grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); */
-    gap: 80px;
-    grid-template-columns: 1fr 1fr 1fr ;
+    gap: 80px 40px; 
+    grid-template-columns: repeat(3, 1fr); 
     justify-items: center;
-    padding: 0px 300px;
-    
+    padding: 0 100px; 
 }
 
+
 .carte-service {
-    width: 350px;
+    width: 100%;
+    max-width: 350px;
     background-color: var(--color-white);
     padding: 40px;
     border-radius: var(--border-m);
@@ -84,7 +73,7 @@
 }
 
 .icone-carte {
-    background: linear-gradient(45deg, var(--main-bg-color) 0%, var( --secondary-bg-color) 100%);
+    background: linear-gradient(45deg, var(--main-bg-color) 0%, var(--secondary-bg-color) 100%);
     border-radius: 50%;
     width: 100px;
     height: 100px;
@@ -101,89 +90,118 @@
     filter: invert(100%);
 }
 
-.carte-service h3 {
-  
+.carte-service h3,
+.carte-service p {
     color: var(--main-bg-color);
-   
 }
 
 .carte-service p {
-   
-    color: var(--main-bg-color);
-    flex-grow: 1;
+    flex-grow: 1; 
 }
+
 
 .bande-appel-action {
     background-color: var(--accent-color);
     color: var(--main-bg-color);
     text-align: center;
-    padding: 30px 0 30px 0;
-
-}
-
-.bande-appel-action {
-    color: var(--main-bg-color);
-   
+    padding: 30px 0;
 }
 
 
-@media (max-width: 767px) {
+.points-indicateurs-services {
+    display: none; 
+}
+
+
+
+@media (max-width: 768px) {
     .conteneur {
         padding: 0 15px;
     }
-   .entete-services {
-        padding: 30px 30px;
-        text-align: center;
+    
+    .liste-services {
+        padding: 30px 0;
     }
+
+
+    .entete-services {
+        padding: 30px 20px;
+    }
+    
     .icone-carte {
         width: 80px;
         height: 80px;
+        margin-bottom: 20px;
     }
+    
     .icone-service {
         width: 40px;
         height: 40px;
     }
 
-    .bande-appel-action {
-        padding: 10px 10px;
-    }
-    .bouton-principal {
-        font-size: 1.1em;
-        padding: 15px 30px;
-    }
-    .liste-services {
-        padding: 30px 0px; 
-    }
-
-    
     .grille-services {
-       display: flex; 
+        display: flex;
         flex-wrap: nowrap; 
         overflow-x: auto; 
-        /* Assure que les cartes s'arrêtent net (effet carrousel) */
         scroll-snap-type: x mandatory; 
-        /* Cacher la barre de défilement */
+        gap: 30px; 
         scrollbar-width: none; 
         -ms-overflow-style: none;
-        gap: 30px; 
-         /* Améliore le défilement tactile */
-        -webkit-overflow-scrolling: touch;
-        border-radius: var(--border-m);
-        padding: 0 0px;
-  
+        padding: 0; 
+        padding-bottom: 10px; 
+    
+        margin: 0 -15px;
     }
-    /* Cacher la barre de défilement pour les navigateurs Webkit (Chrome, Safari) */
+    
     .grille-services::-webkit-scrollbar {
         display: none;
     }
-    
-    .carte-service { 
-        min-width: 200px;
-        width: 300px; 
-        flex-shrink: 0; /* Empêche les cartes de rétrécir */
-        /* Positionne l'arrêt de défilement au centre de l'écran */
+
+    .carte-service {
+   
+        min-width: 80%;
+        max-width: 80%;
+        flex-shrink: 0; 
         scroll-snap-align: center; 
-        margin: 10px 20px;
+        
+     
+        margin: 10px 0; 
+    }
+    
+   
+    .carte-service:first-of-type {
+        margin-left: calc(50% - (80vw / 2));
+    }
+    .carte-service:last-of-type {
+        margin-right: calc(50% - (80vw / 2));
+    }
+
+
+    .points-indicateurs-services {
+        display: flex;
+        justify-content: center; 
+        padding: 30px 0; 
+        z-index: 10;
+       
+        margin-top: 20px; 
+    }
+
+    .point-item-service {
+        height: 12px; 
+        width: 12px; 
+        margin: 0 5px; 
+        background-color: #ffffff;
+        border-radius: 50%; 
+        border: 2px solid var(--accent-color); 
+    }
+    
+    .point-item-service.actif {
+        background-color: var(--accent-color); 
+        transform: scale(1.15);
+    }
+    
+  
+    .bande-appel-action {
+        padding: 20px 20px;
     }
 }
-
