@@ -110,8 +110,9 @@
     display: none;
 }
 .projet-fiche {
+    height: 100%;
     scroll-snap-align: center; 
-    min-width: 80vw;
+    min-width: 80%;
     flex-shrink: 0;
 }
 
