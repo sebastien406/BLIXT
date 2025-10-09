@@ -159,9 +159,11 @@
 .btn-contact {
   margin: auto;
   }
+  
   .bloc-info1 {
     text-align: center;
     gap: 20px;
+    width:100%;
   }
   .bande-appel-action {
     padding: 10px 10px;
@@ -169,7 +171,7 @@
   .titre-section {
     margin: auto;
     text-align: center;
-    padding: 20px;
+    padding: 0 0 20px 0;
   }
 }
 
