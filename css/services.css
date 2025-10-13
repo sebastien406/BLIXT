@@ -144,7 +144,7 @@
         flex-wrap: nowrap; 
         overflow-x: auto; 
         scroll-snap-type: x mandatory; 
-        gap: 30px; 
+        gap: 60px; 
         scrollbar-width: none; 
         -ms-overflow-style: none;
         padding: 0; 
