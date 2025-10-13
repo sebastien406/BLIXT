@@ -130,7 +130,7 @@
     height: 15px;
     width: 15px;
     margin: 0 6px; 
-    background-color: #ffffff; 
+    background-color: rgb(251, 251, 251); 
     border-radius: 50%;
     cursor: pointer;
     transition: all 0.3s ease; 
@@ -141,12 +141,11 @@
 .point-item.actif {
     background-color: var(--accent-color); 
     transform: scale(1.15); 
-     .projet-detail {
-        text-align: center;
-        padding: 20px 0 90px 0;
-        margin-bottom: -50px;
-    }
 }
+.projet-detail {
+        text-align: center;
+        
+    }
 }
 @media (min-width: 769px) {
     .projects-gallery .container {
