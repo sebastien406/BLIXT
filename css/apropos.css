@@ -239,17 +239,17 @@
         gap: 40px;
     }
     .image-boite {
-        transform: rotate(0deg);
+     
         width: 200px;
         height: auto;
     }
     .histoire-texte {
-        transform: rotate(0deg);
+
         padding: 30px 10px;
         text-align: center;
     }
     .valeurs-certifs  {
-        padding: 0px 10px ;
+        padding: 0px 0px ;
     }
     
     .conteneur-flex {
@@ -257,7 +257,7 @@
         margin-top: 40px;
     }
     .carte {
-        padding: 30px;
+        padding: 15px;
     }
     .logos-certifs {
         justify-content: center;
