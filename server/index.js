@@ -16,7 +16,7 @@ const mailjet = Mailjet.apiConnect(
 
 // --- Configuration de Sécurité (CORS) ---
 // TRÈS IMPORTANT : Remplacez 'VOTRE_URL_RENDER_SITE_STATIQUE' par l'URL publique de votre site BLIXT sur Render
-const YOUR_RENDER_SITE_URL = 'https://blixtelec.onrender.com'; // REMPLACER PAR VOTRE VRAIE URL
+const YOUR_RENDER_SITE_URL = 'https://blixt.onrender.com/'; // REMPLACER PAR VOTRE VRAIE URL
 const corsOptions = {
     origin: YOUR_RENDER_SITE_URL, 
     optionsSuccessStatus: 200
@@ -29,8 +29,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 // Adresses e-mail
-const DESTINATION_EMAIL = "contact@blixtelec.fr"; 
-const SENDER_EMAIL = "envoi@votredomaine.fr"; // Doit être vérifiée dans votre compte Mailjet !
+const DESTINATION_EMAIL = "mrlapin508@gmail.com"; 
+const SENDER_EMAIL = "niveletsebastien@gmail.com"; // Doit être vérifiée dans votre compte Mailjet !
 
 // Endpoint /api/contact qui sera appelé par votre formulaire
 app.post('/api/contact', async (req, res) => {
