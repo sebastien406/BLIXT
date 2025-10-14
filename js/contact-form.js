@@ -2,7 +2,7 @@
 
 // !!! IMPORTANT : REMPLACEZ CETTE URL !!!
 // C'est l'URL de votre service Render + /api/contact
-const API_URL = 'https://blixt-mailjet-api.onrender.com'; 
+const API_URL = 'https://blixt-mailjet-api.onrender.com/api/contact'; 
 
 document.getElementById('contactForm').addEventListener('submit', function(e) {
     e.preventDefault();
