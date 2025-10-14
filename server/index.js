@@ -29,7 +29,7 @@ app.use(bodyParser.json());
 
 // Adresses e-mail
 const DESTINATION_EMAIL = "mrlapin508@gmail.com"; 
-const SENDER_EMAIL = "niveletsebastien@gmail.com"; // Doit être vérifiée dans votre compte Mailjet !
+const SENDER_EMAIL = "nivelet.sebastien@orange.fr"; // Doit être vérifiée dans votre compte Mailjet !
 
 // Endpoint /api/contact qui sera appelé par votre formulaire
 app.post('/api/contact', async (req, res) => {
