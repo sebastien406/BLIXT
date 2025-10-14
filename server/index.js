@@ -1,22 +1,21 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const Mailjet = require('node-mailjet');
+const Mailjet = require('node-mailjet'); // L'objet Mailjet est importé
 
 const app = express();
 // Render fournira la variable d'environnement PORT, sinon on utilise 3000
 const PORT = process.env.PORT || 3000; 
 
-// Configuration de Mailjet avec les variables d'environnement de Render
-// Les clés sont lues de manière sécurisée (process.env.MAILJET_...)
-const mailjet = Mailjet.apiConnect(
-    process.env.MAILJET_API_KEY,
-    process.env.MAILJET_SECRET_KEY
-);
+// CORRECTION IMPORTANTE : Initialisation de Mailjet via le constructeur
+const mailjet = new Mailjet({
+    apiKey: process.env.MAILJET_API_KEY,
+    apiSecret: process.env.MAILJET_SECRET_KEY
+});
 
 // --- Configuration de Sécurité (CORS) ---
-// TRÈS IMPORTANT : Remplacez 'VOTRE_URL_RENDER_SITE_STATIQUE' par l'URL publique de votre site BLIXT sur Render
-const YOUR_RENDER_SITE_URL = 'https://blixt.onrender.com/'; // REMPLACER PAR VOTRE VRAIE URL
+// **VÉRIFIEZ ET REMPLACEZ** cette URL par l'URL exacte de votre site BLIXT sur Render
+const YOUR_RENDER_SITE_URL = 'https://blixt.onrender.com'; 
 const corsOptions = {
     origin: YOUR_RENDER_SITE_URL, 
     optionsSuccessStatus: 200
