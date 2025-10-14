@@ -47,7 +47,7 @@
         </div>
     </section>
 
-  <section class="section-contact">
+  <!-- <section class="section-contact">
     <div class="conteneur">
         <div class="grille-contact">
             <div class="carte-formulaire">
@@ -104,6 +104,68 @@
             </div>
         </div>
     </div>
+</section> -->
+<section class="section-contact">
+    <div class="conteneur">
+        <div class="grille-contact">
+            <div class="carte-formulaire">
+                <h2 class="titre-section">Envoyez-nous un message</h2>
+                
+                <form id="contactForm" class="formulaire-contact">
+                    
+                    <input type="text" name="hp_field" style="display:none" aria-hidden="true" tabindex="-1">
+
+                    <div class="groupe-formulaire">
+                        <label for="name">Votre nom :</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="groupe-formulaire">
+                        <label for="email">Votre e-mail :</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="groupe-formulaire">
+                        <label for="phone">Votre téléphone (optionnel) :</label>
+                        <input type="tel" id="phone" name="phone">
+                    </div>
+                    <div class="groupe-formulaire">
+                        <label for="message">Votre message :</label>
+                        <textarea id="message" name="message" rows="6" required></textarea>
+                    </div>
+                    <div class="groupe-formulaires">
+                        <input type="checkbox" id="consent" name="consent" required>
+                        <label for="consent">J'accepte que mes données soient utilisées pour cette demande.</label>
+                    </div>
+                    <button type="submit" class="btn-contact">Envoyer votre message</button>
+                </form>
+            </div>
+
+            <div class="carte-info-contact">
+                <div class="bloc-info1">
+                    <div class="bloc-info">
+                        <h3 class="titre-info">Par téléphone:</h3>
+                        <p class="details-info"><a href="tel:+330123456789">01 23 45 67 89</a></p>
+                    </div>
+                    <div class="bloc-info">
+                        <h3 class="titre-info">Par e-mail :</h3>
+                        <p class="details-info"><a href="mailto:contact@blixtelec.fr">contact@blixtelec.fr</a></p>
+                    </div>
+                    <div class="bloc-info">
+                        <h3 class="titre-info">Notre adresse :</h3>
+                        <p class="details-info">123 Rue de l'Électricité<br>18000 Bourges</p>
+                    </div>
+                    <div class="bloc-info">
+                        <h3 class="titre-info">Horaires :</h3>
+                        <p class="details-info">Du Lundi au Vendredi :<br> 8h00 - 18h00<br>Dépannage d'urgence 7j/7</p>
+                    </div>
+                </div>
+                <div class="conteneur-carte">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12345.678901234567!2d2.3916962!3d47.0810125!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47fa908332145025%3A0x6b772c2957b4f535!2s18000%20Bourges%2C%20France!5e0!3m2!1sfr!2sfr!4v1633512345678!5m2!1sfr!2sfr" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"
+                    title="Localisation de BLIXT à Bourges sur Google Maps">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
 
 <section class="bande-appel-action">
@@ -154,8 +216,8 @@
             <a href="lapin.html"><img src="images/logo lapin2.png" alt="" srcset=""></a>
         </div>
     </footer>
-    <script defer src="js/script.js"></script>
     <script defer src="js/burger.js"></script>
+    <script defer src="js/contact-form.js"></script>
     
 </body>
 </html>
