@@ -118,7 +118,7 @@ const mailjet = Mailjet.apiConnect(
 
 // --- Configuration de Sécurité (CORS) ---
 // **VÉRIFIEZ ET REMPLACEZ** cette URL par l'URL exacte de votre site BLIXT sur Render
-const YOUR_RENDER_SITE_URL = 'https://blixt.onrender.com/'; 
+const YOUR_RENDER_SITE_URL = 'https://blixt.onrender.com'; 
 const corsOptions = {
     origin: YOUR_RENDER_SITE_URL, 
     optionsSuccessStatus: 200
