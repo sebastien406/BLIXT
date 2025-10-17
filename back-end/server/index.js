@@ -1,106 +1,4 @@
-// const express = require('express');
-// const cors = require('cors');
-// const Mailjet = require('node-mailjet');
 
-// const app = express();
-// // Render fournira la variable d'environnement PORT, sinon on utilise 3000
-// const PORT = process.env.PORT || 10000; 
-
-// // CORRECTION IMPORTANTE : Initialisation de Mailjet via le constructeur
-// const mailjet = new Mailjet({
-//     apiKey: process.env.MAILJET_API_KEY,
-//     apiSecret: process.env.MAILJET_SECRET_KEY
-// });
-
-// // --- Configuration de Sécurité (CORS) ---
-// // **VÉRIFIEZ ET REMPLACEZ** cette URL par l'URL exacte de votre site BLIXT sur Render
-// const YOUR_RENDER_SITE_URL = 'https://blixt.onrender.com'; 
-// const corsOptions = {
-//     origin: YOUR_RENDER_SITE_URL, 
-//     optionsSuccessStatus: 200
-// };
-// app.use(cors(corsOptions));
-// // ----------------------------------------
-
-// // Middlewares pour lire les données POST
-// app.use(express.urlencoded({ extended: false }));
-// app.use(express.json());
-
-// // Adresses e-mail
-// const DESTINATION_EMAIL = "mrlapin508@gmail.com"; 
-// const SENDER_EMAIL = "nivelet.sebastien@orange.fr"; // Doit être vérifiée dans votre compte Mailjet !
-// // Route de test pour vérifier que l'API fonctionne
-// app.get('/', (req, res) => {
-//     res.json({ 
-//         message: 'API Mailjet BLIXT opérationnelle',
-//         timestamp: new Date().toISOString(),
-//         env_check: {
-//             api_key_present: !!process.env.MAILJET_API_KEY,
-//             secret_key_present: !!process.env.MAILJET_SECRET_KEY
-//         }
-//     });
-// });
-// // Endpoint /api/contact qui sera appelé par votre formulaire
-// app.post('/api/contact', async (req, res) => {
-    
-//     const { name, email, phone, message, hp_field } = req.body;
-//     console.log('📨 Nouvelle requête contact:', { name, email });
-//     // 1. Contrôle Anti-Spam (Honeypot)
-//     if (hp_field) {
-//         console.log("Honeypot activé. Requête ignorée.");
-//         // Répondre succès pour ne pas alerter le bot
-//         return res.status(200).json({ success: true, message: "Merci pour votre message." }); 
-//     }
-
-//     // 2. Vérification des champs requis
-//     if (!name || !email || !message) {
-//     console.log('❌ Champs manquants');
-//     return res.status(400).json({ 
-//         success: false, 
-//         message: "Nom, email et message sont requis." 
-//     });
-// }
-    
-//     try {
-//         const request = mailjet.post('send', { version: 'v3.1' }).request({
-//             Messages: [
-//                 {
-//                     From: {
-//                         Email: SENDER_EMAIL,
-//                         Name: "Formulaire BLIXT"
-//                     },
-//                     To: [
-//                         {
-//                             Email: DESTINATION_EMAIL,
-//                             Name: "Équipe BLIXT"
-//                         }
-//                     ],
-//                     Subject: `Demande de devis BLIXT par ${name || 'Inconnu'}`,
-//                     TextPart: `
-//                         Nom: ${name}
-//                         Email: ${email}
-//                         Téléphone: ${phone || 'Non fourni'}
-//                         Message: ${message}
-//                     `,
-//                 }
-//             ]
-//         });
-
-//         await request;
-
-//         // Succès
-//         return res.status(200).json({ success: true, message: "Message envoyé avec succès." });
-
-//     } catch (error) {
-//         console.error('Erreur Mailjet:', error.message);
-//         // Échec Mailjet
-//         return res.status(500).json({ success: false, message: "Erreur lors de l'envoi via Mailjet. Code: " + error.statusCode });
-//     }
-// });
-
-// app.listen(PORT, () => {
-//     console.log(`Server listening on port ${PORT}`);
-// });
 require('dotenv').config();
 
 const express = require('express');
@@ -130,21 +28,20 @@ app.use(cors(corsOptions));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-// Adresses e-mail
+// Adresses e-mail a mettre dans render
 const DESTINATION_EMAIL = "mrlapin508@gmail.com"; 
-const SENDER_EMAIL = "nivelet.sebastien@orange.fr"; // Doit être vérifiée dans votre compte Mailjet !
 
-// Route de test pour vérifier que l'API fonctionne
-app.get('/', (req, res) => {
-    res.json({ 
-        message: 'API Mailjet BLIXT opérationnelle',
-        timestamp: new Date().toISOString(),
-        env_check: {
-            api_key_present: !!process.env.MAILJET_API_KEY,
-            secret_key_present: !!process.env.MAILJET_SECRET_KEY
-        }
-    });
-});
+// // Route de test pour vérifier que l'API fonctionne
+// app.get('/', (req, res) => {
+//     res.json({ 
+//         message: 'API Mailjet BLIXT opérationnelle',
+//         timestamp: new Date().toISOString(),
+//         env_check: {
+//             api_key_present: !!process.env.MAILJET_API_KEY,
+//             secret_key_present: !!process.env.MAILJET_SECRET_KEY
+//         }
+//     });
+// });
 
 // Endpoint /api/contact qui sera appelé par votre formulaire
 app.post('/api/contact', async (req, res) => {
@@ -177,7 +74,6 @@ app.post('/api/contact', async (req, res) => {
                 Messages: [
                     {
                         From: {
-                            Email: SENDER_EMAIL,
                             Name: "Formulaire BLIXT"
                         },
                         To: [
@@ -280,7 +176,7 @@ ${message}
 app.use((req, res) => {
     res.status(404).json({ 
         success: false, 
-        message: 'Route non trouvée. Utilisez GET / ou POST /api/contact' 
+        message: 'Route non trouvée.' 
     });
 });
 
@@ -296,8 +192,6 @@ app.listen(PORT, () => {
     console.log('📧 Configuration Mailjet:');
     console.log(`   ├─ API Key: ${process.env.MAILJET_API_KEY ? '✅ Présente' : '❌ Manquante'}`);
     console.log(`   ├─ Secret Key: ${process.env.MAILJET_SECRET_KEY ? '✅ Présente' : '❌ Manquante'}`);
-    console.log(`   ├─ Expéditeur: ${SENDER_EMAIL}`);
-    console.log(`   └─ Destinataire: ${DESTINATION_EMAIL}`);
     console.log('');
     console.log('🔒 Sécurité:');
     console.log(`   └─ CORS autorisé pour: ${YOUR_RENDER_SITE_URL}`);
