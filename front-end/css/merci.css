@@ -1,0 +1,105 @@
+
+        .section-merci {
+            min-height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 4rem 2rem;
+            
+        }
+
+        .conteneur-merci {
+            max-width: 700px;
+            background: var(--highlight-color);
+            padding: 3rem 2rem;
+            border-radius: var(--border-m);
+            box-shadow: var(--box-shadow);
+        }
+
+        .icone-succes {
+            font-size: 5rem;
+            margin-bottom: 1.5rem;
+            animation: pop 0.5s ease-out;
+        }
+
+        .conteneur-merci h1 {
+            color: var(--main-bg-color);
+         
+        }
+
+        .conteneur-merci p {
+            color: var(--black);
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+
+        .liste-prochaines-etapes {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+            text-align: left;
+        }
+
+        .liste-prochaines-etapes h2 {
+            color: var(--black);
+            text-align: center;
+        }
+
+        .liste-prochaines-etapes ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .liste-prochaines-etapes li {
+            padding: 10px 0;
+            padding-left: 2rem;
+            position: relative;
+            color: var(--black);
+            text-align: center;
+        }
+
+       
+
+        .boutons-action {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            
+        }
+
+   
+
+        .info-contact {
+            padding-top: 20px;
+            border-top: 1px solid var(--black);
+            color: var(--black);
+        
+        }
+
+        .info-contact a {
+            color: var(--black);
+            text-decoration: none;
+          
+        }
+
+        .info-contact a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .conteneur-merci {
+                padding: 2rem 1.5rem;
+            }
+
+            .conteneur-merci h1 {
+                font-size: 2rem;
+            }
+
+            .boutons-action {
+                flex-direction: column;
+            }
+    }
