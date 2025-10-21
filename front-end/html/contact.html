@@ -192,7 +192,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Sansation:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
     
-    <!-- CORRECTION N°2 : Le script reCAPTCHA est déplacé dans le HEAD pour garantir son initialisation -->
+    <!-- SCRIPT reCAPTCHA V2 : Utilisation de 'async defer' pour le chargement simple et automatique de la case à cocher. -->
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 <body>
@@ -259,7 +259,7 @@
                         <label for="consent">J'accepte que mes données soient utilisées pour cette demande.</label>
                     </div>
                     
-                    <!-- CORRECTION N°1 : Clé du Site correcte insérée ici -->
+                    <!-- UTILISATION DE LA CLÉ DE SITE V2 CLASSIQUE -->
                     <div class="g-recaptcha" data-sitekey="6LcT2_ArAAAAAFk-rw_WCxeLAZdYtOeEALiAJk1q"></div>
                     
                     <button type="submit" class="btn-contact">Envoyer votre message</button>
@@ -345,10 +345,8 @@
             <a href="lapin.html"><img src="../images/logo lapin2.png" alt="" srcset=""></a>
         </div>
     </footer>
-    <!-- Les scripts de votre site DOIVENT rester après le script de Google pour être exécutés après le chargement du DOM -->
     <script src="../js/burger.js"></script>
     <script src="../../back-end/contact-form.js"></script>
     
 </body>
 </html>
-
