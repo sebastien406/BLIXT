@@ -1,6 +1,6 @@
 
 // contact-form.js (backend)
-
+import 'dotenv/config';
 import express from "express";
 import fetch from "node-fetch";
 import Mailjet from "node-mailjet";
@@ -12,8 +12,8 @@ app.use(express.json());
 
 // ✅ Configuration Mailjet
 const mailjet = Mailjet.apiConnect(
-  process.env.MJ_APIKEY_PUBLIC,
-  process.env.MJ_APIKEY_PRIVATE
+  process.env.MAILJET_API_KEY,
+  process.env.MAILJET_SECRET_KEY
 );
 
 // ✅ Route unique pour traiter le formulaire
