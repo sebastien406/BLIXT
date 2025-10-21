@@ -1,37 +1,52 @@
 
-require('dotenv').config();
 
-const express = require('express');
-const cors = require('cors');
-const Mailjet = require('node-mailjet');
+// require('dotenv').config();
 
-const app = express();
-const PORT = process.env.PORT || 10000; 
+// const express = require('express');
+// const cors = require('cors');
+// const Mailjet = require('node-mailjet');
+// const fs = require('fs'); // Pour la lecture du fichier HTML
+// const path = require('path'); // Pour la gestion des chemins
 
-// ✅ CORRECTION CRITIQUE : Utiliser apiConnect au lieu du constructeur
-const mailjet = Mailjet.apiConnect(
-    process.env.MAILJET_API_KEY,
-    process.env.MAILJET_SECRET_KEY
-);
+// const app = express();
+// const PORT = process.env.PORT || 10000; 
 
-// --- Configuration de Sécurité (CORS) ---
-// **VÉRIFIEZ ET REMPLACEZ** cette URL par l'URL exacte de votre site BLIXT sur Render
-const YOUR_RENDER_SITE_URL = 'https://blixt.onrender.com'; 
-const corsOptions = {
-    origin: YOUR_RENDER_SITE_URL, 
-    optionsSuccessStatus: 200
-};
-app.use(cors(corsOptions));
-// ----------------------------------------
+// // ✅ Mailjet Connexion
+// const mailjet = Mailjet.apiConnect(
+//     process.env.MAILJET_API_KEY,
+//     process.env.MAILJET_SECRET_KEY
+// );
 
-// Middlewares pour lire les données POST
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
+// // --- Configuration de Sécurité (CORS) ---
+// const YOUR_RENDER_SITE_URL = 'https://blixt.onrender.com'; 
+// const corsOptions = {
+//     origin: YOUR_RENDER_SITE_URL, 
+//     optionsSuccessStatus: 200
+// };
+// app.use(cors(corsOptions));
+// // ----------------------------------------
 
-// Adresses e-mail a mettre dans render
-const DESTINATION_EMAIL = "mrlapin508@gmail.com"; 
+// // Middlewares pour lire les données POST
+// app.use(express.urlencoded({ extended: false }));
+// app.use(express.json());
 
-// // Route de test pour vérifier que l'API fonctionne
+// const DESTINATION_EMAIL = "mrlapin508@gmail.com"; 
+
+// // 💡 GESTION DU TEMPLATE HTML : Lecture au démarrage
+// let emailTemplateHtml = null;
+
+// try {
+//     // Le chemin est configuré pour trouver 'modele-email.html' dans le même dossier que 'index.js'
+//     const templatePath = path.join(__dirname, 'modele-email.html'); 
+//     emailTemplateHtml = fs.readFileSync(templatePath, 'utf8');
+//     console.log('✅ Modèle d\'e-mail HTML chargé avec succès.');
+// } catch (error) {
+//     console.error(`❌ ERREUR FATALE: Impossible de lire le fichier modèle-email.html.`, error.message);
+//     process.exit(1); 
+// }
+// // ------------------------------
+
+// // Route de test 
 // app.get('/', (req, res) => {
 //     res.json({ 
 //         message: 'API Mailjet BLIXT opérationnelle',
@@ -43,162 +58,207 @@ const DESTINATION_EMAIL = "mrlapin508@gmail.com";
 //     });
 // });
 
-// Endpoint /api/contact qui sera appelé par votre formulaire
-app.post('/api/contact', async (req, res) => {
-    const { name, email, phone, message, hp_field } = req.body;
+// // Endpoint /api/contact
+// app.post('/api/contact', async (req, res) => {
+//     const { name, email, phone, message, hp_field } = req.body;
     
-    console.log('📨 Nouvelle requête contact reçue:', { name, email, phone: phone ? 'fourni' : 'non fourni' });
+//     console.log('📨 Nouvelle requête contact reçue:', { name, email, phone: phone ? 'fourni' : 'non fourni' });
     
-    // 1. Contrôle Anti-Spam (Honeypot)
+//     // 1. Contrôle Anti-Spam (Honeypot)
+//     if (hp_field) {
+//         console.log("⚠️ Honeypot activé. Requête ignorée.");
+//         return res.status(200).json({ success: true, message: "Merci pour votre message." }); 
+//     }
+
+//     // 2. Vérification des champs requis
+//     if (!name || !email || !message) {
+//         console.log('❌ Champs manquants');
+//         return res.status(400).json({ 
+//             success: false, 
+//             message: "Nom, email et message sont requis." 
+//         });
+//     }
+
+//     // --- TEMPLATING : Remplacement des placeholders avec les données ---
+//     let finalHtml = emailTemplateHtml; 
+    
+//     finalHtml = finalHtml.replace(/__NAME__/g, name);
+//     finalHtml = finalHtml.replace(/__EMAIL__/g, email);
+//     finalHtml = finalHtml.replace(/__PHONE__/g, phone || 'Non renseigné'); 
+    
+//     // Remplacement du message avec gestion des sauts de ligne pour le HTML
+//     finalHtml = finalHtml.replace(/__MESSAGE__/g, message.replace(/\n/g, '<br>')); 
+//     finalHtml = finalHtml.replace(/__DATE__/g, new Date().toLocaleString('fr-FR', { timeZone: 'Europe/Paris' }));
+//     // ------------------------------------------------------------------
+    
+//     // Texte brut (TextPart)
+//     const textPartContent = `
+// Nouvelle demande de devis BLIXT
+
+// Nom: ${name}
+// Email: ${email}
+// Téléphone: ${phone || 'Non fourni'}
+
+// Message:
+// ${message}
+//     `.trim();
+    
+//     try {
+//         console.log('📤 Tentative d\'envoi via Mailjet...');
+        
+//         const request = mailjet
+//             .post('send', { version: 'v3.1' })
+//             .request({
+//                 Messages: [
+//                     {
+//                         From: {
+//                             Email: "votre-adresse-mailjet-verifiee@votredomaine.com", // ⚠️ À Remplacer
+//                             Name: "Formulaire BLIXT"
+//                         },
+//                         To: [
+//                             {
+//                                 Email: DESTINATION_EMAIL,
+//                                 Name: "Équipe BLIXT"
+//                             }
+//                         ],
+//                         Subject: `Demande de devis BLIXT par ${name}`,
+//                         TextPart: textPartContent,
+//                         HTMLPart: finalHtml // Utilisation du template HTML rempli
+//                     }
+//                 ]
+//             });
+
+//         await request;
+        
+//         console.log('✅ Email envoyé avec succès !');
+
+//         return res.status(200).json({ 
+//             success: true, 
+//             message: "Message envoyé avec succès." 
+//         });
+
+//     } catch (error) {
+//         console.error('❌ Erreur Mailjet:', error.statusCode, error.message);
+        
+//         if (error.response) {
+//             console.error('📋 Détails de l\'erreur:', JSON.stringify(error.response.body, null, 2));
+//         }
+        
+//         return res.status(500).json({ 
+//             success: false, 
+//             message: `Erreur lors de l'envoi via Mailjet. Code: ${error.statusCode || 'inconnu'}`
+//         });
+//     }
+// });
+
+// // Gestion des routes non trouvées
+// app.use((req, res) => {
+//     res.status(404).json({ 
+//         success: false, 
+//         message: 'Route non trouvée.' 
+//     });
+// });
+
+// // Démarrage du serveur
+// app.listen(PORT, () => {
+//     console.log('');
+//     console.log('═══════════════════════════════════════════════════');
+//     console.log('🚀 Serveur BLIXT démarré avec succès !');
+//     console.log('═══════════════════════════════════════════════════');
+//     console.log(`📡 Port: ${PORT}`);
+//     console.log(`🌐 URL: http://localhost:${PORT}`);
+//     console.log('');
+//     console.log('📧 Configuration Mailjet:');
+//     console.log(`   ├─ API Key: ${process.env.MAILJET_API_KEY ? '✅ Présente' : '❌ Manquante'}`);
+//     console.log(`   ├─ Secret Key: ${process.env.MAILJET_SECRET_KEY ? '✅ Présente' : '❌ Manquante'}`);
+//     console.log('');
+//     console.log('🔒 Sécurité:');
+//     console.log(`   └─ CORS autorisé pour: ${YOUR_RENDER_SITE_URL}`);
+//     console.log('');
+//     console.log('📍 Routes disponibles:');
+//     console.log('   ├─ GET  / (test de l\'API)');
+//     console.log('   └─ POST /api/contact (envoi de formulaire)');
+//     console.log('═══════════════════════════════════════════════════');
+//     console.log('');
+// });
+
+// contact-form.js (backend)
+
+import express from "express";
+import fetch from "node-fetch";
+import Mailjet from "node-mailjet";
+import cors from "cors";
+
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+// ✅ Configuration Mailjet
+const mailjet = Mailjet.apiConnect(
+  process.env.MJ_APIKEY_PUBLIC,
+  process.env.MJ_APIKEY_PRIVATE
+);
+
+// ✅ Route unique pour traiter le formulaire
+app.post("/api/contact", async (req, res) => {
+  try {
+    const { name, email, phone, message, hp_field, ["g-recaptcha-response"]: token } = req.body;
+
+    // 🚫 Vérification du honeypot (anti-spam)
     if (hp_field) {
-        console.log("⚠️ Honeypot activé. Requête ignorée.");
-        // Répondre succès pour ne pas alerter le bot
-        return res.status(200).json({ success: true, message: "Merci pour votre message." }); 
+      console.log("⚠️ Spam détecté (honeypot activé). Requête ignorée.");
+      return res.status(200).json({ success: true, message: "Message reçu." });
     }
 
-    // 2. Vérification des champs requis
-    if (!name || !email || !message) {
-        console.log('❌ Champs manquants');
-        return res.status(400).json({ 
-            success: false, 
-            message: "Nom, email et message sont requis." 
-        });
+    // 🧠 Vérification du reCAPTCHA
+    if (!token) {
+      return res.status(400).json({ success: false, message: "Token reCAPTCHA manquant." });
     }
-    
-    try {
-        console.log('📤 Tentative d\'envoi via Mailjet...');
-        
-        const request = mailjet
-            .post('send', { version: 'v3.1' })
-            .request({
-                Messages: [
-                    {
-                        From: {
-                            Name: "Formulaire BLIXT"
-                        },
-                        To: [
-                            {
-                                Email: DESTINATION_EMAIL,
-                                Name: "Équipe BLIXT"
-                            }
-                        ],
-                        Subject: `Demande de devis BLIXT par ${name}`,
-                        TextPart: `
-Nouvelle demande de devis BLIXT
 
-Nom: ${name}
-Email: ${email}
-Téléphone: ${phone || 'Non fourni'}
+    const verifyURL = `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${token}`;
+    const captchaRes = await fetch(verifyURL, { method: "POST" });
+    const captchaData = await captchaRes.json();
 
-Message:
-${message}
-                        `.trim(),
-                        HTMLPart: `
-<!DOCTYPE html>
-<html>
-<head>
-    <style>
-        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-        .header { background-color: #667eea; color: white; padding: 20px; text-align: center; border-radius: 8px 8px 0 0; }
-        .content { background-color: #f9f9f9; padding: 30px; border-radius: 0 0 8px 8px; }
-        .field { margin-bottom: 20px; padding: 15px; background: white; border-left: 4px solid #667eea; }
-        .label { font-weight: bold; color: #667eea; display: block; margin-bottom: 5px; }
-        .value { color: #333; }
-        .message-box { background-color: #fff; padding: 20px; border: 1px solid #ddd; border-radius: 4px; margin-top: 10px; }
-        .footer { text-align: center; margin-top: 20px; color: #888; font-size: 12px; }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="header">
-            <h2>⚡ Nouvelle demande de devis BLIXT</h2>
-        </div>
-        <div class="content">
-            <div class="field">
-                <span class="label">👤 Nom complet</span>
-                <span class="value">${name}</span>
-            </div>
-            <div class="field">
-                <span class="label">📧 Email</span>
-                <span class="value"><a href="mailto:${email}">${email}</a></span>
-            </div>
-            <div class="field">
-                <span class="label">📱 Téléphone</span>
-                <span class="value">${phone || 'Non renseigné'}</span>
-            </div>
-            <div class="field">
-                <span class="label">💬 Message</span>
-                <div class="message-box">
-                    ${message.replace(/\n/g, '<br>')}
-                </div>
-            </div>
-            <div class="footer">
-                📅 Reçu le ${new Date().toLocaleString('fr-FR', { timeZone: 'Europe/Paris' })}
-            </div>
-        </div>
-    </div>
-</body>
-</html>
-                        `.trim()
-                    }
-                ]
-            });
-
-        await request;
-        
-        console.log('✅ Email envoyé avec succès !');
-        console.log('📊 Message envoyé à:', DESTINATION_EMAIL);
-
-        // Succès
-        return res.status(200).json({ 
-            success: true, 
-            message: "Message envoyé avec succès." 
-        });
-
-    } catch (error) {
-        console.error('❌ Erreur Mailjet:', error.statusCode, error.message);
-        
-        // Log détaillé pour le debug
-        if (error.response) {
-            console.error('📋 Détails de l\'erreur:', JSON.stringify(error.response.body, null, 2));
-        }
-        
-        // Échec Mailjet
-        return res.status(500).json({ 
-            success: false, 
-            message: `Erreur lors de l'envoi via Mailjet. Code: ${error.statusCode || 'inconnu'}`
-        });
+    if (!captchaData.success) {
+      console.warn("❌ reCAPTCHA invalide :", captchaData);
+      return res.status(400).json({ success: false, message: "Échec de la vérification reCAPTCHA." });
     }
-});
 
-// Gestion des routes non trouvées
-app.use((req, res) => {
-    res.status(404).json({ 
-        success: false, 
-        message: 'Route non trouvée.' 
+    // ✉️ Envoi du mail via Mailjet
+    const result = await mailjet.post("send", { version: "v3.1" }).request({
+      Messages: [
+        {
+          From: {
+            Email: "contact@tonsite.fr",
+            Name: "Site Web BLIXT",
+          },
+          To: [
+            {
+              Email: "contact@blixtelec.fr",
+              Name: "BLIXT",
+            },
+          ],
+          Subject: "Nouveau message depuis le formulaire de contact",
+          TextPart: `
+            Nom : ${name}
+            Email : ${email}
+            Téléphone : ${phone || "Non renseigné"}
+            Message :
+            ${message}
+          `,
+        },
+      ],
     });
+
+    console.log("✅ Email envoyé :", result.body);
+    res.status(200).json({ success: true, message: "Message envoyé avec succès !" });
+
+  } catch (error) {
+    console.error("❌ Erreur lors du traitement :", error);
+    res.status(500).json({ success: false, message: "Erreur serveur." });
+  }
 });
 
-// Démarrage du serveur
-app.listen(PORT, () => {
-    console.log('');
-    console.log('═══════════════════════════════════════════════════');
-    console.log('🚀 Serveur BLIXT démarré avec succès !');
-    console.log('═══════════════════════════════════════════════════');
-    console.log(`📡 Port: ${PORT}`);
-    console.log(`🌐 URL: http://localhost:${PORT}`);
-    console.log('');
-    console.log('📧 Configuration Mailjet:');
-    console.log(`   ├─ API Key: ${process.env.MAILJET_API_KEY ? '✅ Présente' : '❌ Manquante'}`);
-    console.log(`   ├─ Secret Key: ${process.env.MAILJET_SECRET_KEY ? '✅ Présente' : '❌ Manquante'}`);
-    console.log('');
-    console.log('🔒 Sécurité:');
-    console.log(`   └─ CORS autorisé pour: ${YOUR_RENDER_SITE_URL}`);
-    console.log('');
-    console.log('📍 Routes disponibles:');
-    console.log('   ├─ GET  / (test de l\'API)');
-    console.log('   └─ POST /api/contact (envoi de formulaire)');
-    console.log('═══════════════════════════════════════════════════');
-    console.log('');
-});
+// 🚀 Démarrage du serveur
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`✅ Serveur en ligne sur le port ${PORT}`));
