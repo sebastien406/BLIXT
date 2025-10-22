@@ -367,6 +367,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact Blixt</title>
+    
+    <!-- NOUVELLE RÈGLE : Ajout du Content Security Policy (CSP) -->
+    <!-- Ceci autorise explicitement le navigateur à charger les scripts et styles de Google reCAPTCHA. -->
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' https://www.google.com https://www.gstatic.com; style-src 'self' 'unsafe-inline' https://www.google.com https://www.gstatic.com; frame-src https://www.google.com;">
+    
     <!-- 1. INTÉGRATION CÔTÉ CLIENT : Script de l'API reCAPTCHA -->
     <!-- Il doit être dans le <head> ou juste avant </body> -->
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
