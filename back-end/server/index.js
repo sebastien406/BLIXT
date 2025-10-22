@@ -196,16 +196,14 @@ import Mailjet from 'node-mailjet';
 const allowedOrigin = 'https://blixt.onrender.com';
 
 const corsOptions = {
-    // ⚠️ IMPORTANT: Autoriser uniquement votre domaine front-end
     origin: allowedOrigin, 
-    optionsSuccessStatus: 200 // Pour les navigateurs hérités
+    optionsSuccessStatus: 200
 };
 
 // =========================
 // ⚙️ Initialisation du serveur
 // =========================
 const app = express();
-// Utilisation du middleware CORS avec la configuration spécifique
 app.use(cors(corsOptions));
 app.use(express.json());
 
@@ -213,79 +211,99 @@ app.use(express.json());
 // 📧 Configuration de Mailjet
 // =========================
 const mailjet = Mailjet.apiConnect(
- process.env.MAILJET_API_KEY,
- process.env.MAILJET_SECRET_KEY
+    process.env.MAILJET_API_KEY,
+    process.env.MAILJET_SECRET_KEY
 );
 
 // =========================
 // 📩 Route du formulaire de contact
 // =========================
 app.post('/api/contact', async (req, res) => {
- try {
- // Assurez-vous que l'endpoint dans contact_form.html utilise /api/contact
- const { name, email, phone, message, hp_field, ['g-recaptcha-response']: token } = req.body;
+    try {
+        // ✅ Récupération des données (compatible avec les deux formats)
+        const { name, email, phone, message, hp_field, recaptchaToken, 'g-recaptcha-response': gRecaptchaResponse } = req.body;
 
- console.log('📨 Données reçues du front-end:', req.body);
+        console.log('📨 Données reçues du front-end:', req.body);
 
- // 🔒 Vérification du honeypot (anti-spam)
- if (hp_field && hp_field.trim() !== '') {
- console.log('⚠️ Spam détecté (honeypot activé) — requête ignorée.');
- return res.status(200).json({ success: true, message: 'Message reçu (spam ignoré).' });
- }
+        // 🔒 Vérification du honeypot (anti-spam)
+        if (hp_field && hp_field.trim() !== '') {
+            console.log('⚠️ Spam détecté (honeypot activé) — requête ignorée.');
+            return res.status(200).json({ success: true, message: 'Message reçu (spam ignoré).' });
+        }
 
- // 🔑 Vérification du token reCAPTCHA
- if (!token) {
- console.warn('❌ Token reCAPTCHA manquant');
- return res.status(400).json({ success: false, message: 'Token reCAPTCHA manquant.' });
- }
+        // 🔑 Récupération du token reCAPTCHA (supporte les deux formats)
+        const token = recaptchaToken || gRecaptchaResponse;
 
- // ✅ Validation auprès de Google reCAPTCHA
- const verifyURL = `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${token}`;
- const response = await fetch(verifyURL, { method: 'POST' });
- const captchaData = await response.json();
+        if (!token) {
+            console.warn('❌ Token reCAPTCHA manquant');
+            return res.status(400).json({ success: false, message: 'Veuillez valider le reCAPTCHA.' });
+        }
 
- console.log('🔍 Résultat reCAPTCHA:', captchaData);
+        // ✅ Validation auprès de Google reCAPTCHA
+        const verifyURL = `https://www.google.com/recaptcha/api/siteverify`;
+        const verifyResponse = await fetch(verifyURL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${token}`
+        });
 
- if (!captchaData.success) {
- console.warn('🚫 Échec de la vérification reCAPTCHA.');
- return res.status(400).json({ success: false, message: 'Échec de la vérification reCAPTCHA.' });
- }
+        const captchaData = await verifyResponse.json();
 
- // =========================
- // ✉️ Envoi du mail via Mailjet
- // =========================
- const result = await mailjet.post('send', { version: 'v3.1' }).request({
- Messages: [
- {
- From: {
- Email: 'contact@tonsite.fr', // ← à modifier avec ton domaine
- Name: 'Site Web BLIXT',
- },
- To: [
- {
- Email: 'contact@blixtelec.fr', // ← email de réception
- Name: 'BLIXT',
- },
-],
-Subject: '📬 Nouveau message depuis le site BLIXT',
- TextPart: `
- Nom : ${name}
- Email : ${email}
- Téléphone : ${phone || 'Non renseigné'}
- Message :
- ${message}
- `,
- },
- ],
- });
+        console.log('🔍 Résultat reCAPTCHA:', captchaData);
 
- console.log('✅ Email envoyé avec succès :', result.body);
- res.status(200).json({ success: true, message: 'Message envoyé avec succès !' });
+        if (!captchaData.success) {
+            console.warn('🚫 Échec de la vérification reCAPTCHA.');
+            return res.status(400).json({ 
+                success: false, 
+                message: 'Échec de la vérification reCAPTCHA. Veuillez réessayer.',
+                captchaError: captchaData['error-codes']
+            });
+        }
 
- } catch (error) {
- console.error('🔥 Erreur serveur :', error);
- res.status(500).json({ success: false, message: 'Erreur interne du serveur.' });
- }
+        // =========================
+        // ✉️ Envoi du mail via Mailjet
+        // =========================
+        const result = await mailjet.post('send', { version: 'v3.1' }).request({
+            Messages: [
+                {
+                    From: {
+                        Email: 'contact@blixtelec.fr',
+                        Name: 'Site Web BLIXT',
+                    },
+                    To: [
+                        {
+                            Email: 'contact@blixtelec.fr',
+                            Name: 'BLIXT',
+                        },
+                    ],
+                    Subject: '📬 Nouveau message depuis le site BLIXT',
+                    TextPart: `
+Nom : ${name}
+Email : ${email}
+Téléphone : ${phone || 'Non renseigné'}
+
+Message :
+${message}
+
+---
+✅ Vérifié par reCAPTCHA
+                    `,
+                },
+            ],
+        });
+
+        console.log('✅ Email envoyé avec succès :', result.body);
+        res.status(200).json({ success: true, message: 'Message envoyé avec succès !' });
+
+    } catch (error) {
+        console.error('🔥 Erreur serveur :', error);
+        res.status(500).json({ 
+            success: false, 
+            message: 'Erreur interne du serveur. Veuillez réessayer plus tard.' 
+        });
+    }
 });
 
 // =========================
@@ -293,5 +311,6 @@ Subject: '📬 Nouveau message depuis le site BLIXT',
 // =========================
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
- console.log(`✅ Serveur en ligne sur le port ${PORT}`);
+    console.log(`✅ Serveur en ligne sur le port ${PORT}`);
+    console.log(`🔐 reCAPTCHA v2 activé`);
 });
