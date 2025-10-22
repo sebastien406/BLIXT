@@ -279,6 +279,7 @@
 
 /* ======== RECAPTCHA ======== */
 .g-recaptcha {
+  
     min-height: 78px;
     display: block !important;
     visibility: visible !important;
