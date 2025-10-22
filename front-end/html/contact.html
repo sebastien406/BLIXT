@@ -371,115 +371,397 @@
   Ceci est un exemple minimal des éléments reCAPTCHA nécessaires.
   Assurez-vous que votre fichier contact.html contient ces deux parties.
 -->
+
+
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact Blixt</title>
-    
-    <!-- NOUVELLE RÈGLE : Ajout du Content Security Policy (CSP) -->
-    <meta http-equiv="Content-Security-Policy" content="script-src 'self' https://www.google.com https://www.gstatic.com; style-src 'self' 'unsafe-inline' https://www.google.com https://www.gstatic.com; frame-src https://www.google.com;">
-    
-    <!-- Styles de base (ajustez-les pour correspondre à votre design néon) -->
+    <title>Contact - BLIXT Électricité Générale</title>
+    <!-- 1. AJOUT DU SCRIPT RECAPTCHA V2 -->
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <style>
+        /* Styles de base adaptés à l'apparence observée sur vos captures */
         body {
-            background-color: #000;
-            color: #00ffff;
             font-family: Arial, sans-serif;
-            padding: 50px;
-        }
-        .container {
-            max-width: 800px;
-            margin: auto;
-            border: 2px solid #00ffff;
-            box-shadow: 0 0 10px #00ffff;
-            padding: 30px;
-        }
-        form > div {
-            margin-bottom: 20px;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
-        }
-        input[type="text"], input[type="email"], textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #00ffff;
-            background-color: #111;
-            color: #fff;
-        }
-        button {
-            background-color: #00ffff;
-            color: #000;
-            padding: 10px 20px;
-            border: none;
-            cursor: pointer;
-        }
-        /* Style pour centrer le reCAPTCHA si besoin */
-        .recaptcha-wrapper {
+            background-color: #1a1a1a;
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
             display: flex;
-            justify-content: flex-start; /* Aligné à gauche par défaut */
-            margin-top: 20px;
+            flex-direction: column;
+            align-items: center;
+        }
+        .header {
+            width: 100%;
+            background-color: #0d0d0d;
+            padding: 20px 0;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            border-bottom: 2px solid #00ffff;
+        }
+        .logo {
+            color: #00ffff;
+            font-size: 2.5em;
+            font-weight: bold;
+            text-shadow: 0 0 10px #00ffff;
+        }
+        .nav a {
+            color: #ffffff;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 1.1em;
+            transition: color 0.3s, text-shadow 0.3s;
+        }
+        .nav a:hover {
+            color: #00ffff;
+            text-shadow: 0 0 5px #00ffff;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 90%;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: space-between;
+            gap: 40px;
+        }
+
+        .contact-info, .form-container {
+            flex: 1;
+            min-width: 300px;
         }
         
-        /* AJOUT IMPORTANT : Forcer l'affichage de tous les éléments reCAPTCHA s'ils sont cachés par CSS */
-        .g-recaptcha, iframe[title="reCAPTCHA"], iframe[title="reCAPTCHA challenge"] {
-             display: block !important;
-             visibility: visible !important;
+        .form-container {
+            background-color: #242424;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+        }
+
+        h1 {
+            color: #00ffff;
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 0 0 5px #00ffff;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #ccc;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #00ffff;
+            border-radius: 8px;
+            background-color: #333333;
+            color: #ffffff;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, textarea:focus {
+            border-color: #00ffff;
+            box-shadow: 0 0 5px #00ffff;
+            outline: none;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 150px;
+        }
+
+        button {
+            background-color: #00ffff;
+            color: #1a1a1a;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: background-color 0.3s, box-shadow 0.3s;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #00e0e0;
+            box-shadow: 0 0 15px #00ffff;
+        }
+
+        .info-box {
+            background-color: #242424;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border-left: 5px solid #00ffff;
+        }
+        .info-box p { margin: 5px 0; }
+        .info-box strong { color: #00ffff; }
+
+        .map-container {
+            border: 3px solid #00ffff;
+            border-radius: 15px;
+            overflow: hidden;
+            height: 300px;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
+        }
+
+        /* Styles pour la pop-up de message (remplace alert()) */
+        .message-box {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none; /* Caché par défaut */
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .message-content {
+            background: #242424;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 400px;
+            text-align: center;
+            border: 2px solid #00ffff;
+            box-shadow: 0 0 25px rgba(0, 255, 255, 0.6);
+        }
+        .message-content h3 {
+            color: #00ffff;
+            margin-top: 0;
+        }
+        .message-content button {
+            margin-top: 20px;
+            width: auto;
+            padding: 10px 20px;
+        }
+
+        /* Styles pour le pied de page */
+        footer {
+            width: 100%;
+            background-color: #0d0d0d;
+            color: #ccc;
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 40px;
+            border-top: 2px solid #00ffff;
+        }
+        
+        /* Media Queries pour le responsive */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            .header {
+                flex-direction: column;
+            }
+            .nav {
+                margin-top: 15px;
+            }
+            .nav a {
+                display: block;
+                margin: 5px 0;
+            }
         }
     </style>
-    
-    <!-- NOUVELLE RÈGLE : Fonction de Callback reCAPTCHA (nécessaire pour le rendu explicite) -->
-    <script type="text/javascript">
-      var onloadCallback = function() {
-        // Cette fonction est appelée une fois que le script reCAPTCHA est chargé.
-        // Elle initialise le reCAPTCHA dans l'élément ayant l'ID 'recaptcha-div'.
-        grecaptcha.render('recaptcha-div', {
-          // CLÉ DU SITE MISE À JOUR
-          'sitekey' : '6LcrlPMrAAAAAHOLUUJcOCElLZBfNvd8CHZcMOI9' 
-        });
-      };
-    </script>
 </head>
 <body>
 
-<div class="container">
-    <h1>Envoyez-nous un message</h1>
-    <form action="https://blixt-mailjet-api.onrender.com/api/contact" method="POST">
-        <!-- Champ NOM -->
-        <div>
-            <label for="nom">Votre nom:</label>
-            <input type="text" id="nom" name="nom" required>
+    <div class="header">
+        <div class="logo">BLIXT</div>
+        <div class="nav">
+            <a href="index.html">Accueil</a>
+            <a href="realisations.html">Réalisations</a>
+            <a href="services.html">Services</a>
+            <a href="a-propos.html">À propos</a>
+            <a href="contact.html" style="color: #00ffff;">Contact</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- FORMULAIRE -->
+        <div class="form-container">
+            <h1>Envoyez-nous un message</h1>
+            <!-- Mise à jour de l'URL d'action pour votre API Render -->
+            <form id="contactForm" action="https://blixt-mailjet-api.onrender.com/api/contact" method="POST">
+                
+                <div class="form-group">
+                    <label for="name">Votre nom :</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Votre e-mail :</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Votre téléphone (optionnel) :</label>
+                    <input type="tel" id="phone" name="phone">
+                </div>
+                
+                <!-- Champ Honeypot caché pour anti-spam (invisible par CSS) -->
+                <div style="display:none;">
+                    <label for="hp_field">Ne pas remplir ce champ</label>
+                    <input type="text" id="hp_field" name="hp_field">
+                </div>
+
+                <div class="form-group">
+                    <label for="message">Votre message :</label>
+                    <textarea id="message" name="message" required></textarea>
+                </div>
+                
+                <!-- Case d'acceptation des données -->
+                <div class="form-group">
+                    <input type="checkbox" id="data_consent" name="data_consent" required>
+                    <label for="data_consent" style="display: inline;">J'accepte que mes données soient utilisées pour cette demande.</label>
+                </div>
+
+                <!-- 2. AJOUT DU CONTENEUR RECAPTCHA V2 -->
+                <div class="form-group" style="margin-top: 25px;">
+                    <div class="g-recaptcha" data-sitekey="6LcrLPmrAAAAAHOHUUJcOCEILZBrfvdCHZcM0i9"></div>
+                </div>
+
+                <button type="submit" id="submitButton">Envoyer votre message</button>
+            </form>
         </div>
 
-        <!-- Champ EMAIL -->
-        <div>
-            <label for="email">Votre e-mail:</label>
-            <input type="email" id="email" name="email" required>
+        <!-- INFOS DE CONTACT ET CARTE -->
+        <div class="contact-info">
+            <p style="text-align: center; font-size: 1.2em; color: #00ffff; text-shadow: 0 0 5px #00ffff;">N'hésitez pas à nous contacter !</p>
+
+            <div class="info-box">
+                <p><strong>Par téléphone :</strong> 01 23 45 67 89</p>
+                <p><strong>Par e-mail :</strong> contact@blixtelec.fr</p>
+            </div>
+
+            <div class="info-box">
+                <p><strong>Notre adresse :</strong></p>
+                <p>123 Rue de l'Électricité</p>
+                <p>18000 Bourges</p>
+            </div>
+            
+            <div class="info-box">
+                <p><strong>Horaires :</strong></p>
+                <p>Du Lundi au Vendredi : 8H00 - 18H00</p>
+                <p>Dépannage d'urgence : 7j/7</p>
+            </div>
+            
+            <div class="map-container">
+                <!-- Code iFrame d'une carte Google Maps vers Bourges (à adapter) -->
+                <iframe 
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2777.291730032585!2d2.38555771569477!3d47.08119847915574!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47fa84d12b0e6e73%3A0x8670c53d0e987c60!2s18000%20Bourges%2C%20France!5e0!3m2!1sen!2sfr!4v1666453200000!5m2!1sen!2sfr" 
+                    width="100%" 
+                    height="100%" 
+                    style="border:0;" 
+                    allowfullscreen="" 
+                    loading="lazy" 
+                    referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+            </div>
         </div>
-
-        <!-- Champ MESSAGE -->
-        <div>
-            <label for="message">Votre message:</label>
-            <textarea id="message" name="message" rows="5" required></textarea>
+    </div>
+    
+    <footer>
+        <p>© 2025 BLIXT. Tous droits réservés. Site réalisé par la team Casse Grain.</p>
+    </footer>
+    
+    <!-- Zone de message modale (remplace alert) -->
+    <div id="messageBox" class="message-box">
+        <div class="message-content">
+            <h3 id="messageTitle">Statut de l'envoi</h3>
+            <p id="messageText"></p>
+            <button onclick="closeMessageBox()">OK</button>
         </div>
+    </div>
 
-        <!-- 2. INTÉGRATION CÔTÉ CLIENT : Le DIV du reCAPTCHA (sans la classe g-recaptcha) -->
-        <div class="recaptcha-wrapper">
-             <!-- Utilisation d'un ID pour le ciblage par la fonction Javascript -->
-             <div id="recaptcha-div"></div>
-        </div>
-        
-        <!-- Bouton d'envoi -->
-        <button type="submit">Envoyer votre message</button>
-    </form>
-</div>
+    <script>
+        // Fonction pour afficher la boîte de message modale
+        function showMessageBox(title, text) {
+            document.getElementById('messageTitle').textContent = title;
+            document.getElementById('messageText').textContent = text;
+            document.getElementById('messageBox').style.display = 'flex';
+        }
 
-<!-- 1. INTÉGRATION CÔTÉ CLIENT : Script de l'API reCAPTCHA avec le paramètre 'onload' -->
-<!-- Ce paramètre indique à Google d'appeler notre fonction 'onloadCallback' une fois chargé. -->
-<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"></script>
+        // Fonction pour fermer la boîte de message modale
+        function closeMessageBox() {
+            document.getElementById('messageBox').style.display = 'none';
+        }
 
+        document.getElementById('contactForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const submitButton = document.getElementById('submitButton');
+            const originalButtonText = submitButton.textContent;
+            
+            // Empêche l'envoi multiple et indique l'état
+            submitButton.disabled = true;
+            submitButton.textContent = 'Envoi en cours...';
+
+            // Récupérer le token reCAPTCHA
+            const token = grecaptcha.getResponse();
+
+            if (!token) {
+                // Le reCAPTCHA n'a pas été coché ou est expiré.
+                showMessageBox('Erreur d\'envoi', 'Veuillez cocher la case "Je ne suis pas un robot" pour valider le formulaire.');
+                
+                submitButton.disabled = false;
+                submitButton.textContent = originalButtonText;
+                
+                return;
+            }
+
+            // Récupérer les données du formulaire
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData.entries());
+            data['g-recaptcha-response'] = token; // Ajouter le token à l'objet de données
+
+            try {
+                const response = await fetch(this.action, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                });
+
+                const result = await response.json();
+
+                if (response.ok && result.success) {
+                    showMessageBox('Succès', 'Votre message a été envoyé avec succès ! Nous vous répondrons rapidement.');
+                    document.getElementById('contactForm').reset(); // Vider le formulaire
+                    grecaptcha.reset(); // Réinitialiser le widget reCAPTCHA
+                } else {
+                    // Afficher l'erreur retournée par l'API (ex: Token reCAPTCHA manquant)
+                    const errorMessage = result.message || 'Une erreur inattendue est survenue lors de l\'envoi.';
+                    showMessageBox('Erreur d\'envoi', errorMessage);
+                }
+            } catch (error) {
+                console.error('Erreur de connexion:', error);
+                showMessageBox('Erreur de Connexion', 'Erreur de connexion avec le serveur. Veuillez vérifier votre connexion internet.');
+            } finally {
+                // Rétablit le bouton après l'opération (succès ou échec)
+                submitButton.disabled = false;
+                submitButton.textContent = originalButtonText;
+            }
+        });
+    </script>
 </body>
 </html>

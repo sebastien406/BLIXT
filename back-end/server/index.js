@@ -293,5 +293,5 @@ Subject: '📬 Nouveau message depuis le site BLIXT',
 // =========================
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`✅ Serveur en ligne sur le port ${PORT}`);
+ console.log(`✅ Serveur en ligne sur le port ${PORT}`);
 });
