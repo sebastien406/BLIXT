@@ -361,6 +361,10 @@
   Ceci est un exemple minimal des éléments reCAPTCHA nécessaires.
   Assurez-vous que votre fichier contact.html contient ces deux parties.
 -->
+<!--
+  Ceci est un exemple minimal des éléments reCAPTCHA nécessaires.
+  Assurez-vous que votre fichier contact.html contient ces deux parties.
+-->
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -372,10 +376,6 @@
     <!-- Ceci autorise explicitement le navigateur à charger les scripts et styles de Google reCAPTCHA. -->
     <meta http-equiv="Content-Security-Policy" content="script-src 'self' https://www.google.com https://www.gstatic.com; style-src 'self' 'unsafe-inline' https://www.google.com https://www.gstatic.com; frame-src https://www.google.com;">
     
-    <!-- 1. INTÉGRATION CÔTÉ CLIENT : Script de l'API reCAPTCHA -->
-    <!-- Il doit être dans le <head> ou juste avant </body> -->
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-
     <!-- Styles de base (ajustez-les pour correspondre à votre design néon) -->
     <style>
         body {
@@ -418,6 +418,12 @@
             justify-content: flex-start; /* Aligné à gauche par défaut */
             margin-top: 20px;
         }
+        
+        /* AJOUT IMPORTANT : Forcer l'affichage de tous les éléments reCAPTCHA s'ils sont cachés par CSS */
+        .g-recaptcha, iframe[title="reCAPTCHA"], iframe[title="reCAPTCHA challenge"] {
+             display: block !important;
+             visibility: visible !important;
+        }
     </style>
 </head>
 <body>
@@ -454,5 +460,10 @@
     </form>
 </div>
 
+<!-- 1. INTÉGRATION CÔTÉ CLIENT : Script de l'API reCAPTCHA -->
+<!-- Suppression de 'async defer' pour charger le script de manière synchrone en dernier recours -->
+<script src="https://www.google.com/recaptcha/api.js"></script>
+
 </body>
 </html>
+
