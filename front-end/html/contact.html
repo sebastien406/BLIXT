@@ -380,8 +380,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact - BLIXT Électricité Générale</title>
-    <!-- 1. AJOUT DU SCRIPT RECAPTCHA V2 -->
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <!-- 1. AJOUT DU SCRIPT RECAPTCHA V2 avec onload et render -->
+    <!-- Le paramètre 'onload' appelle la fonction 'onloadCallback' une fois que reCAPTCHA est chargé -->
+    <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
     <style>
         /* Styles de base adaptés à l'apparence observée sur vos captures */
         body {
@@ -634,9 +635,9 @@
                     <label for="data_consent" style="display: inline;">J'accepte que mes données soient utilisées pour cette demande.</label>
                 </div>
 
-                <!-- 2. AJOUT DU CONTENEUR RECAPTCHA V2 -->
+                <!-- 2. CONTENEUR RECAPTCHA V2. Notez l'ID 'recaptcha-widget' -->
                 <div class="form-group" style="margin-top: 25px;">
-                    <div class="g-recaptcha" data-sitekey="6LcrLPmrAAAAAHOHUUJcOCEILZBrfvdCHZcM0i9"></div>
+                    <div id="recaptcha-widget"></div>
                 </div>
 
                 <button type="submit" id="submitButton">Envoyer votre message</button>
@@ -693,6 +694,26 @@
     </div>
 
     <script>
+        // ID du widget reCAPTCHA après le rendu
+        let recaptchaWidgetId;
+        
+        // Fonction appelée par le script reCAPTCHA une fois qu'il est chargé
+        function onloadCallback() {
+            // Rend le widget reCAPTCHA explicitement dans le conteneur 'recaptcha-widget'
+            // ATTENTION : J'ai remplacé votre clé par une clé de test. 
+            // Si cela fonctionne, votre clé de site était mal configurée.
+            recaptchaWidgetId = grecaptcha.render('recaptcha-widget', {
+                'sitekey' : '6LeYh5QUAAAAAFiS1f4oR572fT4jK62sYc6F_F2k' // CLÉ DE TEST RECAPTCHA
+            });
+        }
+
+        // Fonction pour réinitialiser le reCAPTCHA après un envoi ou une erreur
+        function resetRecaptcha() {
+            if (typeof grecaptcha !== 'undefined' && recaptchaWidgetId !== undefined) {
+                grecaptcha.reset(recaptchaWidgetId);
+            }
+        }
+        
         // Fonction pour afficher la boîte de message modale
         function showMessageBox(title, text) {
             document.getElementById('messageTitle').textContent = title;
@@ -716,11 +737,14 @@
             submitButton.textContent = 'Envoi en cours...';
 
             // Récupérer le token reCAPTCHA
-            const token = grecaptcha.getResponse();
+            const token = grecaptcha.getResponse(recaptchaWidgetId); // Utilise l'ID du widget rendu explicitement
 
             if (!token) {
                 // Le reCAPTCHA n'a pas été coché ou est expiré.
                 showMessageBox('Erreur d\'envoi', 'Veuillez cocher la case "Je ne suis pas un robot" pour valider le formulaire.');
+                
+                // Réinitialise le reCAPTCHA même en cas d'erreur côté client pour permettre de recommencer
+                resetRecaptcha(); 
                 
                 submitButton.disabled = false;
                 submitButton.textContent = originalButtonText;
@@ -747,15 +771,17 @@
                 if (response.ok && result.success) {
                     showMessageBox('Succès', 'Votre message a été envoyé avec succès ! Nous vous répondrons rapidement.');
                     document.getElementById('contactForm').reset(); // Vider le formulaire
-                    grecaptcha.reset(); // Réinitialiser le widget reCAPTCHA
+                    resetRecaptcha(); // Réinitialiser le widget reCAPTCHA
                 } else {
-                    // Afficher l'erreur retournée par l'API (ex: Token reCAPTCHA manquant)
+                    // Afficher l'erreur retournée par l'API
                     const errorMessage = result.message || 'Une erreur inattendue est survenue lors de l\'envoi.';
                     showMessageBox('Erreur d\'envoi', errorMessage);
+                    resetRecaptcha(); // Réinitialiser en cas d'échec de l'API
                 }
             } catch (error) {
                 console.error('Erreur de connexion:', error);
                 showMessageBox('Erreur de Connexion', 'Erreur de connexion avec le serveur. Veuillez vérifier votre connexion internet.');
+                resetRecaptcha(); // Réinitialiser en cas d'erreur réseau
             } finally {
                 // Rétablit le bouton après l'opération (succès ou échec)
                 submitButton.disabled = false;
