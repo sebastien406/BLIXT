@@ -75,9 +75,10 @@
 // console.log('🚀 Script contact-form.js chargé avec succès');
 // console.log('🌐 API URL configurée:', API_URL);
 
-const API_URL = 'https://blixt-mailjet-api.onrender.com/api/contact'; 
+// URL de ton API Node sur Render
+const API_URL = 'https://blixt-mailjet-api.onrender.com/api/contact';
 
-document.getElementById('contactForm').addEventListener('submit', function(e) {
+document.getElementById('contactForm').addEventListener('submit', function (e) {
     e.preventDefault();
 
     const form = e.target;
@@ -88,14 +89,14 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
         data[key] = value;
     });
 
-    // Vérification du consentement
+    // Vérifie la case de consentement
     const consentCheckbox = document.getElementById('consent');
     if (!consentCheckbox.checked) {
         alert("Veuillez accepter l'utilisation de vos données.");
         return;
     }
 
-    // ✅ Vérification reCAPTCHA
+    // Vérifie le reCAPTCHA
     const recaptchaResponse = grecaptcha.getResponse();
     if (!recaptchaResponse) {
         alert("Veuillez valider le reCAPTCHA avant d'envoyer le message.");
@@ -111,7 +112,7 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
     submitButton.style.opacity = '0.6';
     submitButton.style.cursor = 'not-allowed';
 
-    console.log('📤 Envoi des données vers l\'API...');
+    console.log('📤 Envoi des données vers l’API...');
 
     fetch(API_URL, {
         method: 'POST',
@@ -121,12 +122,9 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
     .then(response => response.json().then(json => ({ status: response.status, body: json })))
     .then(({ status, body }) => {
         console.log('📊 Réponse:', body);
-        
         if (status === 200 && body.success) {
-            console.log('✅ Succès ! Redirection vers merci.html...');
-            window.location.href = 'merci.html'; 
+            window.location.href = 'merci.html';
         } else {
-            console.error('❌ Erreur:', body.message);
             alert("Erreur : " + (body.message || 'Veuillez réessayer.'));
             resetButton(submitButton, originalText);
         }
@@ -137,7 +135,7 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
         resetButton(submitButton, originalText);
     })
     .finally(() => {
-        grecaptcha.reset(); // Réinitialise le captcha après chaque envoi
+        grecaptcha.reset();
     });
 });
 
@@ -148,5 +146,4 @@ function resetButton(button, originalText) {
     button.style.cursor = 'pointer';
 }
 
-console.log('🚀 Script contact-form.js chargé avec succès');
-console.log('🌐 API URL configurée:', API_URL);
+console.log('🚀 contact-form.js chargé avec succès');
