@@ -365,6 +365,12 @@
   Ceci est un exemple minimal des éléments reCAPTCHA nécessaires.
   Assurez-vous que votre fichier contact.html contient ces deux parties.
 -->
+
+
+<!--
+  Ceci est un exemple minimal des éléments reCAPTCHA nécessaires.
+  Assurez-vous que votre fichier contact.html contient ces deux parties.
+-->
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -373,7 +379,6 @@
     <title>Contact Blixt</title>
     
     <!-- NOUVELLE RÈGLE : Ajout du Content Security Policy (CSP) -->
-    <!-- Ceci autorise explicitement le navigateur à charger les scripts et styles de Google reCAPTCHA. -->
     <meta http-equiv="Content-Security-Policy" content="script-src 'self' https://www.google.com https://www.gstatic.com; style-src 'self' 'unsafe-inline' https://www.google.com https://www.gstatic.com; frame-src https://www.google.com;">
     
     <!-- Styles de base (ajustez-les pour correspondre à votre design néon) -->
@@ -425,12 +430,24 @@
              visibility: visible !important;
         }
     </style>
+    
+    <!-- NOUVELLE RÈGLE : Fonction de Callback reCAPTCHA (nécessaire pour le rendu explicite) -->
+    <script type="text/javascript">
+      var onloadCallback = function() {
+        // Cette fonction est appelée une fois que le script reCAPTCHA est chargé.
+        // Elle initialise le reCAPTCHA dans l'élément ayant l'ID 'recaptcha-div'.
+        grecaptcha.render('recaptcha-div', {
+          // CLÉ DU SITE MISE À JOUR
+          'sitekey' : '6LcrlPMrAAAAAHOLUUJcOCElLZBfNvd8CHZcMOI9' 
+        });
+      };
+    </script>
 </head>
 <body>
 
 <div class="container">
     <h1>Envoyez-nous un message</h1>
-    <form action="VOTRE_ENDPOINT_DE_SERVEUR" method="POST">
+    <form action="https://blixt-mailjet-api.onrender.com/api/contact" method="POST">
         <!-- Champ NOM -->
         <div>
             <label for="nom">Votre nom:</label>
@@ -449,10 +466,10 @@
             <textarea id="message" name="message" rows="5" required></textarea>
         </div>
 
-        <!-- 2. INTÉGRATION CÔTÉ CLIENT : Le DIV du reCAPTCHA -->
-        <!-- La Clé du Site doit être ici : 6LcrlPMrAAAAACwIB_8xcY3tsW8pYPCYLLrA7h -->
+        <!-- 2. INTÉGRATION CÔTÉ CLIENT : Le DIV du reCAPTCHA (sans la classe g-recaptcha) -->
         <div class="recaptcha-wrapper">
-             <div class="g-recaptcha" data-sitekey="6LcrlPMrAAAAACwIB_8xcY3tsW8pYPCYLLrA7h"></div>
+             <!-- Utilisation d'un ID pour le ciblage par la fonction Javascript -->
+             <div id="recaptcha-div"></div>
         </div>
         
         <!-- Bouton d'envoi -->
@@ -460,10 +477,9 @@
     </form>
 </div>
 
-<!-- 1. INTÉGRATION CÔTÉ CLIENT : Script de l'API reCAPTCHA -->
-<!-- Suppression de 'async defer' pour charger le script de manière synchrone en dernier recours -->
-<script src="https://www.google.com/recaptcha/api.js"></script>
+<!-- 1. INTÉGRATION CÔTÉ CLIENT : Script de l'API reCAPTCHA avec le paramètre 'onload' -->
+<!-- Ce paramètre indique à Google d'appeler notre fonction 'onloadCallback' une fois chargé. -->
+<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"></script>
 
 </body>
 </html>
-
