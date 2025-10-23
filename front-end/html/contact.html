@@ -191,7 +191,8 @@
     <link rel="stylesheet" href="../css/modules/bouton.css">
     <link rel="stylesheet" href="../css/modules/menu-burger.css">
     <link rel="stylesheet" href="../css/pages/contact.css">
-
+    <!-- <script src="https://www.google.com/recaptcha/api.js" async defer></script> -->
+     <script src="https://www.google.com/recaptcha/api.js?render=6LdqYvMrAAAAAAK35scff6crzCyaoxe5zINKKXf8"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Sansation:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
@@ -237,7 +238,7 @@
                     <div class="carte-formulaire">
                         <h2 class="titre-section">Envoyez-nous un message</h2>
 
-                        <form id="contactForm" class="formulaire-contact">
+                        <form id="contactForm" class="formulaire-contact" action="/api/contact" method="post">
                             <input type="text" name="hp_field" style="display:none" aria-hidden="true" tabindex="-1">
 
                             <div class="groupe-formulaire">
@@ -267,10 +268,16 @@
                             
                             <!-- ✅ RECAPTCHA V2 -->
                             <div class="groupe-formulaire" style="margin: 20px 0; display: flex; justify-content: center;">
-                                <div class="g-recaptcha" data-sitekey="6LdqYvMrAAAAAAK35scff6crzCyaoxe5zINKKXf8"></div>
-                            </div>
+                                <!-- <div class="g-recaptcha" data-sitekey="6LdqYvMrAAAAAAK35scff6crzCyaoxe5zINKKXf8"></div> -->
+                               <!-- <button class="g-recaptcha" 
+        data-sitekey="6LdqYvMrAAAAAAK35scff6crzCyaoxe5zINKKXf8" 
+        data-callback='onSubmit' 
+        data-action='submit'>Submit</button>  
+                            </div> -->
                             
-                            <button type="submit" class="btn-contact">Envoyer votre message</button>
+                            <button type="submit" class="btn-contact g-recaptcha "  data-sitekey="6LdqYvMrAAAAAAK35scff6crzCyaoxe5zINKKXf8" 
+        data-callback='onSubmit' 
+        data-action='submit'>Envoyer votre message</button>
                         </form> 
                     </div>
 
@@ -344,8 +351,16 @@
     </footer>
 
     <!-- ✅ SCRIPT RECAPTCHA - IMPORTANT : Charger AVANT contact-form.js -->
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <!-- <script src="https://www.google.com/recaptcha/api.js" async defer></script> -->
     <script defer src="../js/burger.js"></script>
     <script defer src="../js/contact-form.js"></script>
+    <script>
+   function onSubmit(token) {
+     document.getElementById("demo-form").submit();
+   }
+ </script>
+
 </body>
 </html>
+
+<!-- <script src="https://www.google.com/recaptcha/api.js?render=6LdqYvMrAAAAAAK35scff6crzCyaoxe5zINKKXf8"></script> -->

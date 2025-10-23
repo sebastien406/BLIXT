@@ -195,16 +195,12 @@ import Mailjet from 'node-mailjet';
 // =========================
 const allowedOrigin = 'https://blixt.onrender.com';
 
-const corsOptions = {
-    origin: allowedOrigin, 
-    optionsSuccessStatus: 200
-};
 
 // =========================
 // ⚙️ Initialisation du serveur
 // =========================
 const app = express();
-app.use(cors(corsOptions));
+app.use(cors());
 app.use(express.json());
 
 // =========================
