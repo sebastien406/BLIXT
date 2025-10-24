@@ -1,7 +1,10 @@
 
-
 // // Configuration de l'API
-// const API_URL = 'https://blixt-mailjet-api.onrender.com/api/contact'; 
+// const API_URL = 'https://blixt-mailjet-api.onrender.com/api/contact';
+
+// // Log de confirmation du chargement du script
+// console.log('🚀 Script contact-form.js chargé avec succès');
+// console.log('🌐 API URL configurée:', API_URL);
 
 // document.getElementById('contactForm').addEventListener('submit', function(e) {
 //     e.preventDefault();
@@ -9,7 +12,7 @@
 //     const form = e.target;
 //     const formData = new FormData(form);
 //     const data = {};
-    
+
 //     // Récupération de toutes les données du formulaire
 //     formData.forEach((value, key) => {
 //         data[key] = value;
@@ -24,61 +27,84 @@
 
 //     const submitButton = form.querySelector('button[type="submit"]');
 //     const originalText = submitButton.textContent;
-    
+
 //     // Désactivation du bouton pendant l'envoi
 //     submitButton.textContent = 'Envoi en cours...';
 //     submitButton.disabled = true;
 //     submitButton.style.opacity = '0.6';
 //     submitButton.style.cursor = 'not-allowed';
 
-//     console.log('📤 Envoi des données vers l\'API...');
+//     console.log('⚙️ Vérification reCAPTCHA v3...');
 
-//     fetch(API_URL, {
-//         method: 'POST',
-//         headers: {
-//             'Content-Type': 'application/json',
-//         },
-//         body: JSON.stringify(data),
-//     })
-//     .then(response => {
-//         console.log('📨 Réponse reçue, status:', response.status);
-//         return response.json().then(json => ({ status: response.status, body: json }));
-//     })
-//     .then(({ status, body }) => {
-//         console.log('📊 Données de réponse:', body);
-        
-//         if (status === 200 && body.success) {
-//             console.log('✅ Succès ! Redirection vers la page de remerciement...');
-//             window.location.href = 'merci.html'; 
-//         } else {
-//             console.error('❌ Échec:', body.message);
-//             alert("Erreur d'envoi : " + (body.message || 'Veuillez vérifier les informations.'));
-            
-//             // Réactivation du bouton
-//             submitButton.textContent = originalText;
-//             submitButton.disabled = false;
-//             submitButton.style.opacity = '1';
-//             submitButton.style.cursor = 'pointer';
-//         }
-//     })
-//     .catch(error => {
-//         console.error('❌ Erreur réseau:', error);
-//         alert("Erreur de connexion avec le serveur. Veuillez vérifier votre connexion internet et réessayer.");
-        
+//     // Vérification de la disponibilité de grecaptcha
+//     if (typeof grecaptcha === 'undefined') {
+//         console.error('grecaptcha n\'est pas défini. Le script reCAPTCHA n\'a pas été chargé correctement.');
+//         alert("Erreur lors de la vérification reCAPTCHA. Veuillez réessayer.");
+
 //         // Réactivation du bouton
-//         submitButton.textContent = originalText;
-//         submitButton.disabled = false;
-//         submitButton.style.opacity = '1';
-//         submitButton.style.cursor = 'pointer';
+//         resetSubmitButton(submitButton, originalText);
+//         return;
+//     }
+
+//     // Étape reCAPTCHA : génération du token avant l'envoi
+//     grecaptcha.ready(function() {
+//         grecaptcha.execute('6LcHj_UrAAAAAF62B2oDMTqIaxOa1FMvgpt3SEDd', { action: 'submit' })
+//             .then(function(token) {
+//                 console.log('Token reCAPTCHA généré :', token);
+//                 data['g-recaptcha-response'] = token;
+//                 console.log('Données envoyées :', data);
+
+//                 // Envoi des données à l'API
+//                 return fetch(API_URL, {
+//                     method: 'POST',
+//                     headers: {
+//                         'Content-Type': 'application/json',
+//                     },
+//                     body: JSON.stringify(data),
+//                 });
+//             })
+//             .then(response => {
+//                 console.log('📨 Réponse reçue, status:', response.status);
+//                 return response.json().then(json => ({ status: response.status, body: json }));
+//             })
+//             .then(({ status, body }) => {
+//                 console.log('📊 Données de réponse:', body);
+
+//                 if (status === 200 && body.success) {
+//                     console.log('✅ Succès ! Redirection vers la page de remerciement...');
+//                     window.location.href = 'merci.html';
+//                 } else {
+//                     console.error('❌ Échec:', body.message);
+//                     alert("Erreur d'envoi : " + (body.message || 'Veuillez vérifier les informations.'));
+//                 }
+//             })
+//             .catch(error => {
+//                 console.error('❌ Erreur:', error);
+//                 alert("Erreur de connexion avec le serveur. Veuillez vérifier votre connexion internet et réessayer.");
+//             })
+//             .finally(() => {
+//                 // Réactivation du bouton
+//                 resetSubmitButton(submitButton, originalText);
+//             });
 //     });
 // });
 
-// // Log de confirmation du chargement du script
-// console.log('🚀 Script contact-form.js chargé avec succès');
-// console.log('🌐 API URL configurée:', API_URL);
+// // Fonction pour réinitialiser le bouton de soumission
+// function resetSubmitButton(button, originalText) {
+//     button.textContent = originalText;
+//     button.disabled = false;
+//     button.style.opacity = '1';
+//     button.style.cursor = 'pointer';
+// }
+
+
 
 // Configuration de l'API
-const API_URL = 'https://blixt-mailjet-api.onrender.com/api/contact'; 
+const API_URL = 'https://blixt-mailjet-api.onrender.com/api/contact';
+
+// Log de confirmation du chargement du script
+console.log('🚀 Script contact-form.js chargé avec succès');
+console.log('🌐 API URL configurée:', API_URL);
 
 document.getElementById('contactForm').addEventListener('submit', function(e) {
     e.preventDefault();
@@ -86,7 +112,7 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
     const form = e.target;
     const formData = new FormData(form);
     const data = {};
-    
+
     // Récupération de toutes les données du formulaire
     formData.forEach((value, key) => {
         data[key] = value;
@@ -110,23 +136,32 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
 
     console.log('⚙️ Vérification reCAPTCHA v3...');
 
-    // ✅ Étape reCAPTCHA : génération du jeton avant l'envoi
+    // Vérification de la disponibilité de grecaptcha
+    if (typeof grecaptcha === 'undefined') {
+        console.error('grecaptcha n\'est pas défini. Le script reCAPTCHA n\'a pas été chargé correctement.');
+        alert("Erreur lors de la vérification reCAPTCHA. Veuillez réessayer.");
+
+        // Réactivation du bouton
+        resetSubmitButton(submitButton, originalText);
+        return;
+    }
+
+    // Étape reCAPTCHA : génération du token avant l'envoi
     grecaptcha.ready(function() {
-        grecaptcha.execute('6LfvPPUrAAAAAEI8ZlcYbo5nbWcgwljeM6mjp-Ar', { action: 'submit' }).then(function(token) {
-    console.log('Token reCAPTCHA généré :', token); // Ajoute cette ligne
-    data['g-recaptcha-response'] = token;
-    console.log('📤 Envoi des données vers l\'API...', data);
-    // ...
-});
+        grecaptcha.execute('6LcHj_UrAAAAAF62B2oDMTqIaxOa1FMvgpt3SEDd', { action: 'submit' })
+            .then(function(token) {
+                console.log('Token reCAPTCHA généré :', token);
+                data['g-recaptcha-response'] = token;
+                console.log('Données envoyées :', data);
 
-
-            // Envoi des données à l'API
-            fetch(API_URL, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data),
+                // Envoi des données à l'API
+                return fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                });
             })
             .then(response => {
                 console.log('📨 Réponse reçue, status:', response.status);
@@ -134,35 +169,31 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
             })
             .then(({ status, body }) => {
                 console.log('📊 Données de réponse:', body);
-                
+
                 if (status === 200 && body.success) {
                     console.log('✅ Succès ! Redirection vers la page de remerciement...');
-                    window.location.href = 'merci.html'; 
+                    window.location.href = 'merci.html';
                 } else {
                     console.error('❌ Échec:', body.message);
                     alert("Erreur d'envoi : " + (body.message || 'Veuillez vérifier les informations.'));
-                    
-                    // Réactivation du bouton
-                    submitButton.textContent = originalText;
-                    submitButton.disabled = false;
-                    submitButton.style.opacity = '1';
-                    submitButton.style.cursor = 'pointer';
+                    // Réinitialiser le bouton en cas d'échec
+                    resetSubmitButton(submitButton, originalText);
                 }
             })
             .catch(error => {
-                console.error('❌ Erreur réseau:', error);
+                console.error('❌ Erreur:', error);
                 alert("Erreur de connexion avec le serveur. Veuillez vérifier votre connexion internet et réessayer.");
-                
-                // Réactivation du bouton
-                submitButton.textContent = originalText;
-                submitButton.disabled = false;
-                submitButton.style.opacity = '1';
-                submitButton.style.cursor = 'pointer';
+                // Réinitialiser le bouton en cas d'erreur
+                resetSubmitButton(submitButton, originalText);
             });
-        });
     });
+});
 
 
-// Log de confirmation du chargement du script
-console.log('🚀 Script contact-form.js chargé avec succès');
-console.log('🌐 API URL configurée:', API_URL);
+// Fonction pour réinitialiser le bouton de soumission
+function resetSubmitButton(button, originalText) {
+    button.textContent = originalText;
+    button.disabled = false;
+    button.style.opacity = '1';
+    button.style.cursor = 'pointer';
+}

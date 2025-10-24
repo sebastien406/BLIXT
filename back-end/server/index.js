@@ -231,10 +231,13 @@ const mailjet = Mailjet.apiConnect(
 //     optionsSuccessStatus: 200
 // };
 const corsOptions = {
-    origin: ['https://blixt.onrender.com', 'http://127.0.0.1:5500'],
+    origin: [
+        'https://blixt.onrender.com', // 🌐 ton site hébergé
+        'http://localhost:3000',      // 💻 ton environnement de test local
+        'http://127.0.0.1:3000'       // alternative locale si nécessaire
+    ],
     optionsSuccessStatus: 200
 };
-
 app.use(cors(corsOptions));
 
 app.use(cors(corsOptions));
@@ -259,49 +262,48 @@ app.get('/', (req, res) => {
     });
 });
 
-// --- Route principale ---
 app.post('/api/contact', async (req, res) => {
     const { name, email, phone, message, hp_field, 'g-recaptcha-response': recaptchaToken } = req.body;
-    console.log('Token reCAPTCHA reçu :', recaptchaToken); // Ajoute cette ligne
-    console.log('📨 Nouvelle requête contact reçue:', { name, email });
+    console.log('Requête reçue :', { name, email, recaptchaToken });
 
-    // 🛑 Honeypot anti-spam
     if (hp_field) {
-        console.log("⚠️ Honeypot activé. Requête ignorée.");
+        console.log("Honeypot activé. Requête ignorée.");
         return res.status(200).json({ success: true, message: "Merci pour votre message." });
     }
 
-    // ⚠️ Vérification des champs
     if (!name || !email || !message) {
-        return res.status(400).json({
-            success: false,
-            message: "Nom, email et message sont requis."
-        });
+        return res.status(400).json({ success: false, message: "Nom, email et message sont requis." });
     }
 
-    // ✅ Étape reCAPTCHA : validation du token côté serveur
     try {
-        console.log('🔒 Vérification reCAPTCHA côté serveur...');
+        console.log('Vérification reCAPTCHA avec le token :', recaptchaToken);
         const verifyURL = `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${recaptchaToken}`;
         const recaptchaRes = await fetch(verifyURL, { method: 'POST' });
         const recaptchaData = await recaptchaRes.json();
-        console.log('Réponse complète de reCAPTCHA :', recaptchaData); // Ajoute cette ligne
-        console.log('📊 Résultat reCAPTCHA:', recaptchaData);
+        console.log('Réponse de l\'API reCAPTCHA :', recaptchaData);
 
-        if (!recaptchaData.success || recaptchaData.score < 0.2) {
-            console.warn('🚫 Vérification reCAPTCHA échouée.');
+        if (!recaptchaData.success) {
+            console.warn('Échec de la vérification reCAPTCHA :', recaptchaData['error-codes']);
             return res.status(400).json({
                 success: false,
-                message: "Échec reCAPTCHA : tentative suspecte détectée."
+                message: `Échec reCAPTCHA : ${recaptchaData['error-codes'] ? recaptchaData['error-codes'].join(', ') : 'tentative suspecte détectée.'}`
+            });
+        }
+
+        if (recaptchaData.score < 0.1) {
+            console.warn('Score reCAPTCHA trop bas :', recaptchaData.score);
+            return res.status(400).json({
+                success: false,
+                message: "Score reCAPTCHA trop bas."
             });
         }
     } catch (err) {
-        console.error('❌ Erreur lors de la vérification reCAPTCHA:', err);
-        return res.status(500).json({
-            success: false,
-            message: "Erreur lors de la vérification du reCAPTCHA."
-        });
+        console.error('Erreur lors de la vérification reCAPTCHA:', err);
+        return res.status(500).json({ success: false, message: "Erreur lors de la vérification du reCAPTCHA." });
     }
+    // ...
+
+
 
     // ✅ Si le reCAPTCHA est validé → envoi du mail via Mailjet
     try {

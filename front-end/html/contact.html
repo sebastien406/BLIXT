@@ -179,41 +179,37 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Contactez BLIXT pour un devis gratuit et personnalisé à Bourges." />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Contactez BLIXT pour un devis gratuit et personnalisé à Bourges.">
     <title>Contactez BLIXT | Demandez un devis à Bourges</title>
 
-    <!-- ✅ reCAPTCHA v3 : remplace YOUR_SITE_KEY par ta clé publique -->
-    <!-- <script src="https://www.google.com/recaptcha/api.js?render=6LfvPPUrAAAAAEl8ZIcYbo5nbWcgw1jeM6mjp-Ar"></script> -->
-    <script src="https://www.google.com/recaptcha/api.js?render=6LfvPPUrAAAAAEI8ZlcYbo5nbWcgwljeM6mjp-Ar"></script>
-
+    <!-- reCAPTCHA v3 -->
+    <script src="https://www.google.com/recaptcha/api.js?render=6LcHj_UrAAAAAF62B2oDMTqIaxOa1FMvgpt3SEDd"></script>
 
     <!-- Feuilles de style -->
-    <link rel="stylesheet" href="../css/base.css" />
-    <link rel="stylesheet" href="../css/modules/header.css" />
-    <link rel="stylesheet" href="../css/modules/footer.css" />
-    <link rel="stylesheet" href="../css/modules/bouton.css" />
-    <link rel="stylesheet" href="../css/modules/menu-burger.css" />
-    <link rel="stylesheet" href="../css/pages/contact.css" />
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/modules/header.css">
+    <link rel="stylesheet" href="../css/modules/footer.css">
+    <link rel="stylesheet" href="../css/modules/bouton.css">
+    <link rel="stylesheet" href="../css/modules/menu-burger.css">
+    <link rel="stylesheet" href="../css/pages/contact.css">
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Sansation:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet" />
+    <!-- Polices Google -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sansation:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
 </head>
 <body>
-
     <header>
         <div class="logo-container">
-            <img src="../images/logo-transparent.png" alt="Logo de Blixt" class="logo" />
+            <img src="../images/logo-transparent.png" alt="Logo de Blixt" class="logo">
         </div>
-
         <button class="menu-burger-bouton" aria-label="Ouvrir le menu de navigation">
             <span class="ligne-burger"></span>
             <span class="ligne-burger"></span>
             <span class="ligne-burger"></span>
         </button>
-
         <nav class="nav-menu">
             <ul>
                 <li><a href="index.html">Accueil</a></li>
@@ -240,11 +236,9 @@
                 <div class="grille-contact">
                     <div class="carte-formulaire">
                         <h2 class="titre-section">Envoyez-nous un message</h2>
-
-                        <!-- Formulaire : note action + method si tu veux fallback vers PHP -->
                         <form id="contactForm" class="formulaire-contact" action="contact.php" method="POST" novalidate>
                             <!-- Honeypot (champ invisible pour bots) -->
-                            <input type="text" name="hp_field" style="display:none" aria-hidden="true" tabindex="-1" autocomplete="off">
+                            <input type="text" name="hp_field" style="display:none;" aria-hidden="true" tabindex="-1" autocomplete="off">
 
                             <div class="groupe-formulaire">
                                 <label for="name">Votre nom :</label>
@@ -271,7 +265,7 @@
                                 <label for="consent">J'accepte que mes données soient utilisées pour cette demande.</label>
                             </div>
 
-                            <!-- Champ caché pour recevoir le token reCAPTCHA v3 (rempli par JS avant envoi) -->
+                            <!-- Champ caché pour recevoir le token reCAPTCHA v3 -->
                             <input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response">
 
                             <button type="submit" class="btn-contact">Envoyer votre message</button>
@@ -317,7 +311,7 @@
     <footer class="site-footer">
         <div class="footer-container">
             <div class="logo-container-footer">
-                <img src="../images/Logo_B_-_Blixt-transparent.png" alt="Logo de Blixt" class="logo" />
+                <img src="../images/Logo_B_-_Blixt-transparent.png" alt="Logo de Blixt" class="logo">
             </div>
             <div class="footer-section">
                 <h3>À propos de BLIXT</h3>
@@ -345,15 +339,19 @@
         </div>
     </footer>
 
-    <!-- SCRIPTS : burger, contact-form -->
-    <!-- contact-form.js doit contenir le code qui récupère les champs, appelle grecaptcha.execute() (ou bien on l'appelle ici),
-         puis envoie vers l'API (fetch). Il doit être chargé APRÈS le script reCAPTCHA (ici le script reCAPTCHA est dans le <head>). -->
-
+    <!-- SCRIPTS -->
     <script defer src="../js/burger.js"></script>
     <script defer src="../js/contact-form.js"></script>
 
-    <!-- Petit rappel : si ton contact-form.js ne gère pas l'appel à grecaptcha.execute,
-         tu peux remplacer/compléter contact-form.js pour utiliser la logique fournie précédemment. -->
-
+    <!-- Vérification du chargement de grecaptcha -->
+    <script>
+        window.onload = function() {
+            if (typeof grecaptcha === 'undefined') {
+                console.error('grecaptcha n\'est pas chargé.');
+            } else {
+                console.log('grecaptcha est chargé avec succès.');
+            }
+        };
+    </script>
 </body>
 </html>
