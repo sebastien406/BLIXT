@@ -113,10 +113,12 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
     // ✅ Étape reCAPTCHA : génération du jeton avant l'envoi
     grecaptcha.ready(function() {
         grecaptcha.execute('6LfvPPUrAAAAAEI8ZlcYbo5nbWcgwljeM6mjp-Ar', { action: 'submit' }).then(function(token) {
-            // Ajout du token au payload
-            data['g-recaptcha-response'] = token;
+    console.log('Token reCAPTCHA généré :', token); // Ajoute cette ligne
+    data['g-recaptcha-response'] = token;
+    console.log('📤 Envoi des données vers l\'API...', data);
+    // ...
+});
 
-            console.log('📤 Envoi des données vers l\'API...', data);
 
             // Envoi des données à l'API
             fetch(API_URL, {
@@ -159,7 +161,7 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
             });
         });
     });
-});
+
 
 // Log de confirmation du chargement du script
 console.log('🚀 Script contact-form.js chargé avec succès');

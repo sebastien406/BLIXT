@@ -262,7 +262,7 @@ app.get('/', (req, res) => {
 // --- Route principale ---
 app.post('/api/contact', async (req, res) => {
     const { name, email, phone, message, hp_field, 'g-recaptcha-response': recaptchaToken } = req.body;
-
+    console.log('Token reCAPTCHA reçu :', recaptchaToken); // Ajoute cette ligne
     console.log('📨 Nouvelle requête contact reçue:', { name, email });
 
     // 🛑 Honeypot anti-spam
@@ -285,10 +285,10 @@ app.post('/api/contact', async (req, res) => {
         const verifyURL = `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${recaptchaToken}`;
         const recaptchaRes = await fetch(verifyURL, { method: 'POST' });
         const recaptchaData = await recaptchaRes.json();
-
+        console.log('Réponse complète de reCAPTCHA :', recaptchaData); // Ajoute cette ligne
         console.log('📊 Résultat reCAPTCHA:', recaptchaData);
 
-        if (!recaptchaData.success || recaptchaData.score < 0.5) {
+        if (!recaptchaData.success || recaptchaData.score < 0.2) {
             console.warn('🚫 Vérification reCAPTCHA échouée.');
             return res.status(400).json({
                 success: false,
