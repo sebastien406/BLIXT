@@ -208,12 +208,12 @@
 
 
 
-require('dotenv').config();
+import 'dotenv/config'; // Au lieu de require('dotenv').config();
+import express from 'express'; // Au lieu de const express = require('express');
+import cors from 'cors'; // Au lieu de const cors = require('cors');
+import Mailjet from 'node-mailjet'; // Au lieu de const Mailjet = require('node-mailjet');
+import fetch from 'node-fetch'; // Au lieu de const fetch = require('node-fetch');
 
-const express = require('express');
-const cors = require('cors');
-const Mailjet = require('node-mailjet');
-const fetch = require('node-fetch'); // ✅ Pour vérifier le token reCAPTCHA côté serveur
 
 const app = express();
 const PORT = process.env.PORT || 10000;
