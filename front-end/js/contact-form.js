@@ -112,7 +112,7 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
 
     // ✅ Étape reCAPTCHA : génération du jeton avant l'envoi
     grecaptcha.ready(function() {
-        grecaptcha.execute('6LfvPPUrAAAAAEl8ZIcYbo5nbWcgw1jeM6mjp-Ar', { action: 'submit' }).then(function(token) {
+        grecaptcha.execute('6LfvPPUrAAAAAEI8ZlcYbo5nbWcgwljeM6mjp-Ar', { action: 'submit' }).then(function(token) {
             // Ajout du token au payload
             data['g-recaptcha-response'] = token;
 

@@ -225,11 +225,18 @@ const mailjet = Mailjet.apiConnect(
 );
 
 // --- Sécurité (CORS) ---
-const YOUR_RENDER_SITE_URL = 'https://blixt.onrender.com';
+// const YOUR_RENDER_SITE_URL = 'https://blixt.onrender.com';
+// const corsOptions = {
+//     origin: YOUR_RENDER_SITE_URL,
+//     optionsSuccessStatus: 200
+// };
 const corsOptions = {
-    origin: YOUR_RENDER_SITE_URL,
+    origin: ['https://blixt.onrender.com', 'http://127.0.0.1:5500'],
     optionsSuccessStatus: 200
 };
+
+app.use(cors(corsOptions));
+
 app.use(cors(corsOptions));
 
 app.use(express.urlencoded({ extended: false }));
