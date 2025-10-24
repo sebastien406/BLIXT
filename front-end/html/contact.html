@@ -176,32 +176,34 @@
 </body>
 </html> -->
 
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Contactez BLIXT pour un devis gratuit et personnalisé à Bourges.">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Contactez BLIXT pour un devis gratuit et personnalisé à Bourges." />
     <title>Contactez BLIXT | Demandez un devis à Bourges</title>
 
-    <link rel="stylesheet" href="../css/base.css">
-    <link rel="stylesheet" href="../css/modules/header.css">
-    <link rel="stylesheet" href="../css/modules/footer.css">
-    <link rel="stylesheet" href="../css/modules/bouton.css">
-    <link rel="stylesheet" href="../css/modules/menu-burger.css">
-    <link rel="stylesheet" href="../css/pages/contact.css">
-    <!-- <script src="https://www.google.com/recaptcha/api.js" async defer></script> -->
-     <script src="https://www.google.com/recaptcha/api.js?render=6LdqYvMrAAAAAAK35scff6crzCyaoxe5zINKKXf8"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Sansation:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+    <!-- ✅ reCAPTCHA v3 : remplace YOUR_SITE_KEY par ta clé publique -->
+    <script src="https://www.google.com/recaptcha/api.js?render=6LfvPPUrAAAAAEl8ZIcYbo5nbWcgw1jeM6mjp-Ar"></script>
+
+    <!-- Feuilles de style -->
+    <link rel="stylesheet" href="../css/base.css" />
+    <link rel="stylesheet" href="../css/modules/header.css" />
+    <link rel="stylesheet" href="../css/modules/footer.css" />
+    <link rel="stylesheet" href="../css/modules/bouton.css" />
+    <link rel="stylesheet" href="../css/modules/menu-burger.css" />
+    <link rel="stylesheet" href="../css/pages/contact.css" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Sansation:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet" />
 </head>
 <body>
 
     <header>
         <div class="logo-container">
-            <img src="../images/logo-transparent.png" alt="Logo de Blixt" class="logo">
+            <img src="../images/logo-transparent.png" alt="Logo de Blixt" class="logo" />
         </div>
 
         <button class="menu-burger-bouton" aria-label="Ouvrir le menu de navigation">
@@ -234,12 +236,13 @@
         <section class="section-contact">
             <div class="conteneur">
                 <div class="grille-contact">
-
                     <div class="carte-formulaire">
                         <h2 class="titre-section">Envoyez-nous un message</h2>
 
-                        <form id="contactForm" class="formulaire-contact" action="/api/contact" method="post">
-                            <input type="text" name="hp_field" style="display:none" aria-hidden="true" tabindex="-1">
+                        <!-- Formulaire : note action + method si tu veux fallback vers PHP -->
+                        <form id="contactForm" class="formulaire-contact" action="contact.php" method="POST" novalidate>
+                            <!-- Honeypot (champ invisible pour bots) -->
+                            <input type="text" name="hp_field" style="display:none" aria-hidden="true" tabindex="-1" autocomplete="off">
 
                             <div class="groupe-formulaire">
                                 <label for="name">Votre nom :</label>
@@ -265,26 +268,18 @@
                                 <input type="checkbox" id="consent" name="consent" required>
                                 <label for="consent">J'accepte que mes données soient utilisées pour cette demande.</label>
                             </div>
-                            
-                            <!-- ✅ RECAPTCHA V2 -->
-                            <div class="groupe-formulaire" style="margin: 20px 0; display: flex; justify-content: center;">
-                                <!-- <div class="g-recaptcha" data-sitekey="6LdqYvMrAAAAAAK35scff6crzCyaoxe5zINKKXf8"></div> -->
-                               <!-- <button class="g-recaptcha" 
-        data-sitekey="6LdqYvMrAAAAAAK35scff6crzCyaoxe5zINKKXf8" 
-        data-callback='onSubmit' 
-        data-action='submit'>Submit</button>  
-                            </div> -->
-                            
-                            <button type="submit" class="btn-contact g-recaptcha "  data-sitekey="6LdqYvMrAAAAAAK35scff6crzCyaoxe5zINKKXf8" 
-        data-callback='onSubmit' 
-        data-action='submit'>Envoyer votre message</button>
-                        </form> 
+
+                            <!-- Champ caché pour recevoir le token reCAPTCHA v3 (rempli par JS avant envoi) -->
+                            <input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response">
+
+                            <button type="submit" class="btn-contact">Envoyer votre message</button>
+                        </form>
                     </div>
 
                     <div class="carte-info-contact">
                         <div class="bloc-info1">
                             <div class="bloc-info">
-                                <h3 class="titre-info">Par téléphone:</h3>
+                                <h3 class="titre-info">Par téléphone :</h3>
                                 <p class="details-info"><a href="tel:+330123456789">01 23 45 67 89</a></p>
                             </div>
                             <div class="bloc-info">
@@ -297,15 +292,13 @@
                             </div>
                             <div class="bloc-info">
                                 <h3 class="titre-info">Horaires :</h3>
-                                <p class="details-info">Du Lundi au Vendredi : 8h00 - 18h00<br>Dépannage d'urgence 7j/7</p>
+                                <p class="details-info">Du Lundi au Vendredi :<br> 8h00 - 18h00<br>Dépannage d'urgence 7j/7</p>
                             </div>
                         </div>
-
-                        <div class="conteneur-carte">
-                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12345.678901234567!2d2.3916962!3d47.0810125!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47fa908332145025%3A0x6b772c2957b4f535!2s18000%20Bourges%2C%20France!5e0!3m2!1sfr!2sfr!4v1633512345678!5m2!1sfr!2sfr" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" title="Localisation de BLIXT à Bourges"></iframe>
+                        <div class="conteneur-carte" style="height:200px;">
+                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12345.678901234567!2d2.3916962!3d47.0810125!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47fa908332145025%3A0x6b772c2957b4f535!2s18000%20Bourges%2C%20France!5e0!3m2!1sfr!2sfr!4v1633512345678!5m2!1sfr!2sfr" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" title="Localisation de BLIXT à Bourges sur Google Maps"></iframe>
                         </div>
                     </div>
-
                 </div>
             </div>
         </section>
@@ -322,7 +315,7 @@
     <footer class="site-footer">
         <div class="footer-container">
             <div class="logo-container-footer">
-                <img src="../images/Logo_B_-_Blixt-transparent.png" alt="Logo de Blixt" class="logo">
+                <img src="../images/Logo_B_-_Blixt-transparent.png" alt="Logo de Blixt" class="logo" />
             </div>
             <div class="footer-section">
                 <h3>À propos de BLIXT</h3>
@@ -350,17 +343,15 @@
         </div>
     </footer>
 
-    <!-- ✅ SCRIPT RECAPTCHA - IMPORTANT : Charger AVANT contact-form.js -->
-    <!-- <script src="https://www.google.com/recaptcha/api.js" async defer></script> -->
+    <!-- SCRIPTS : burger, contact-form -->
+    <!-- contact-form.js doit contenir le code qui récupère les champs, appelle grecaptcha.execute() (ou bien on l'appelle ici),
+         puis envoie vers l'API (fetch). Il doit être chargé APRÈS le script reCAPTCHA (ici le script reCAPTCHA est dans le <head>). -->
+
     <script defer src="../js/burger.js"></script>
     <script defer src="../js/contact-form.js"></script>
-    <script>
-   function onSubmit(token) {
-     document.getElementById("demo-form").submit();
-   }
- </script>
+
+    <!-- Petit rappel : si ton contact-form.js ne gère pas l'appel à grecaptcha.execute,
+         tu peux remplacer/compléter contact-form.js pour utiliser la logique fournie précédemment. -->
 
 </body>
 </html>
-
-<!-- <script src="https://www.google.com/recaptcha/api.js?render=6LdqYvMrAAAAAAK35scff6crzCyaoxe5zINKKXf8"></script> -->
