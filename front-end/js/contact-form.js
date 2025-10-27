@@ -47,7 +47,7 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
 
     // Étape reCAPTCHA : génération du token avant l'envoi
     grecaptcha.ready(function() {
-        grecaptcha.execute('6LcHj_UrAAAAAF62B2oDMTqIaxOa1FMvgpt3SEDd', { action: 'submit' })
+        grecaptcha.execute('6LcC7_grAAAAANd0w6CgPGfru3hXMv43d_ZypJNR', { action: 'submit' })
             .then(function(token) {
                 console.log('Token reCAPTCHA généré :', token);
                 data['g-recaptcha-response'] = token;
