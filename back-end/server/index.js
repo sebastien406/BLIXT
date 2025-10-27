@@ -254,13 +254,21 @@ app.post('/api/contact', async (req, res) => {
     
     // --- 1. Vérification reCAPTCHA ---
     
-    // 🛑 VÉRIFICATION CRITIQUE: La clé secrète doit exister.
+    // 🛑 VÉRIFICATION CRITIQUE: La clé secrète du serveur doit exister.
     if (!RECAPTCHA_SECRET_KEY) {
-        console.error('ERREUR ENV: RECAPTCHA_SECRET_KEY est manquant !');
-        // Erreur 500 pour le serveur, mais on peut simuler une erreur reCAPTCHA pour le client.
+        console.error('ERREUR ENV: RECAPTCHA_SECRET_KEY est manquant sur le serveur !');
         return res.status(500).json({ 
             success: false, 
-            message: "Erreur interne: Clé de vérification reCAPTCHA manquante." 
+            message: "Erreur serveur: Clé de vérification reCAPTCHA manquante. (Vérifiez les variables d'environnement de l'API)." 
+        });
+    }
+
+    // 🛑 VÉRIFICATION CRITIQUE: Le token du client doit exister.
+    if (!recaptchaToken) {
+        console.warn('RECAPTCHA: Token client manquant dans la requête.');
+        return res.status(400).json({
+            success: false,
+            message: "Échec reCAPTCHA : Token de réponse manquant ou vide."
         });
     }
 
