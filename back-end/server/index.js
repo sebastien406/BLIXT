@@ -18,7 +18,7 @@ const mailjet = Mailjet.apiConnect(
 // --- Sécurité (CORS) ---
 const corsOptions = {
     origin: [
-        // 'https://blixt-mailjet-api.onrender.com', // api render
+        'https://blixt-mailjet-api.onrender.com', // api render
         'https://blixt.onrender.com',    // 🌐 ton site hébergé
         'http://localhost:3000',         // 💻 ton environnement de test local (port 3000)
         'http://127.0.0.1:3000',         // alternative locale (port 3000)
