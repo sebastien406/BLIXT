@@ -97,77 +97,17 @@
 //     button.style.cursor = 'pointer';
 // }
 
-// contact-form.js — version finale compatible Render + reCAPTCHA v3 + CSP
 console.log("🚀 Script contact-form.js chargé avec succès");
 
 // --- Configuration ---
 const API_URL = "https://blixt-mailjet-api.onrender.com/api/contact";
 console.log("🌐 API URL configurée:", API_URL);
 
-const RECAPTCHA_SITE_KEY = "6LcC7_grAAAAANd0w6CgPGfru3hXMv43d_ZypJNR"; // ⚠️ Remplace ici par ta vraie clé publique (site key)
+// ⚠️ REMPLACEZ par votre VRAIE clé publique reCAPTCHA v3
+// Obtenez-la ici: https://www.google.com/recaptcha/admin
+const RECAPTCHA_SITE_KEY = "6LcC7_grAAAAANd0w6CgPGfru3hXMv43d_ZypJNR";
 
-// --- Fonction d’envoi du formulaire ---
-document.addEventListener("DOMContentLoaded", () => {
-  const form = document.getElementById("contact-form");
-  const statusDiv = document.getElementById("form-status");
-
-  if (!form) {
-    console.error("❌ Formulaire non trouvé dans la page.");
-    return;
-  }
-
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    statusDiv.textContent = "⏳ Envoi en cours...";
-
-    const formData = {
-      name: form.querySelector('input[name="name"]').value.trim(),
-      email: form.querySelector('input[name="email"]').value.trim(),
-      phone: form.querySelector('input[name="phone"]').value.trim(),
-      message: form.querySelector('textarea[name="message"]').value.trim(),
-      hp_field: form.querySelector('input[name="hp_field"]')?.value || "",
-    };
-
-    console.log("🧾 Données formulaire:", formData);
-
-    try {
-      // --- Étape 1 : obtenir le token reCAPTCHA ---
-      const token = await grecaptcha.execute(RECAPTCHA_SITE_KEY, { action: "submit" });
-      console.log("🔐 Token reCAPTCHA obtenu:", token ? "OK" : "Manquant");
-
-      if (!token) {
-        throw new Error("Token reCAPTCHA manquant.");
-      }
-
-      // --- Étape 2 : envoyer au backend ---
-      console.log("📤 Envoi des données vers l'API...");
-      const response = await fetch(API_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ ...formData, "g-recaptcha-response": token }),
-      });
-
-      console.log("📨 Réponse reçue, status:", response.status);
-
-      const data = await response.json();
-      console.log("📊 Données de réponse:", data);
-
-      if (response.ok) {
-        statusDiv.textContent = "✅ Message envoyé avec succès !";
-        form.reset();
-      } else {
-        statusDiv.textContent = `❌ Échec: ${data.message || "Erreur inconnue."}`;
-      }
-    } catch (error) {
-      console.error("⚠️ Erreur lors de l'envoi:", error);
-      statusDiv.textContent = "❌ Une erreur est survenue. Vérifie ta connexion.";
-    }
-  });
-});
-
-// --- Charger reCAPTCHA v3 ---
+// --- Chargement de reCAPTCHA v3 ---
 (function loadRecaptcha() {
   if (typeof grecaptcha === "undefined") {
     console.log("⚙️ Chargement du script reCAPTCHA...");
@@ -175,10 +115,128 @@ document.addEventListener("DOMContentLoaded", () => {
     script.src = `https://www.google.com/recaptcha/api.js?render=${RECAPTCHA_SITE_KEY}`;
     script.async = true;
     script.defer = true;
-    script.onload = () => console.log("✅ reCAPTCHA v3 chargé !");
+    script.onload = () => console.log("✅ reCAPTCHA v3 chargé avec succès!");
+    script.onerror = () => console.error("❌ Échec du chargement de reCAPTCHA");
     document.head.appendChild(script);
   } else {
     console.log("✅ reCAPTCHA déjà disponible.");
   }
 })();
 
+// --- Fonction d'envoi du formulaire ---
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("contact-form");
+  const statusDiv = document.getElementById("form-status");
+
+  if (!form) {
+    console.error("❌ Formulaire #contact-form non trouvé dans la page.");
+    return;
+  }
+
+  console.log("✅ Formulaire trouvé, écouteur d'événement attaché");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    console.log("📝 Formulaire soumis - Début du traitement");
+
+    // Afficher le statut d'envoi
+    if (statusDiv) {
+      statusDiv.textContent = "⏳ Envoi en cours...";
+      statusDiv.style.color = "#007bff";
+    }
+
+    // Récupération des données du formulaire
+    const formData = {
+      name: form.querySelector('input[name="name"]')?.value.trim() || "",
+      email: form.querySelector('input[name="email"]')?.value.trim() || "",
+      phone: form.querySelector('input[name="phone"]')?.value.trim() || "",
+      message: form.querySelector('textarea[name="message"]')?.value.trim() || "",
+      hp_field: form.querySelector('input[name="hp_field"]')?.value || "",
+    };
+
+    console.log("🧾 Données du formulaire récupérées:", {
+      name: formData.name,
+      email: formData.email,
+      hasPhone: !!formData.phone,
+      messageLength: formData.message.length,
+      hp_field: formData.hp_field ? "REMPLI (spam détecté)" : "vide (OK)"
+    });
+
+    try {
+      // --- Étape 1 : Vérifier que reCAPTCHA est chargé ---
+      if (typeof grecaptcha === "undefined") {
+        throw new Error("❌ reCAPTCHA n'est pas chargé. Rechargez la page.");
+      }
+
+      console.log("🔐 Demande de génération du token reCAPTCHA...");
+
+      // --- Étape 2 : Obtenir le token reCAPTCHA ---
+      const token = await grecaptcha.execute(RECAPTCHA_SITE_KEY, { action: "submit" });
+      
+      if (!token) {
+        throw new Error("Token reCAPTCHA non généré.");
+      }
+
+      console.log("✅ Token reCAPTCHA obtenu:", token.substring(0, 30) + "...");
+
+      // --- Étape 3 : Préparer le payload ---
+      // ⚠️ IMPORTANT: Utiliser "recaptchaToken" (nom attendu par votre backend)
+      const payload = {
+        ...formData,
+        recaptchaToken: token
+      };
+
+      console.log("📦 Payload préparé avec recaptchaToken:", {
+        name: payload.name,
+        email: payload.email,
+        phone: payload.phone,
+        messageLength: payload.message?.length,
+        hp_field: payload.hp_field,
+        hasRecaptchaToken: !!payload.recaptchaToken
+      });
+
+      // --- Étape 4 : Envoyer au backend ---
+      console.log("📤 Envoi de la requête POST vers:", API_URL);
+
+      const response = await fetch(API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      console.log("📨 Réponse HTTP reçue, status:", response.status);
+
+      // --- Étape 5 : Traiter la réponse ---
+      const data = await response.json();
+      console.log("📊 Corps de la réponse JSON:", data);
+
+      if (response.ok && data.success) {
+        console.log("✅ MESSAGE ENVOYÉ AVEC SUCCÈS!");
+        if (statusDiv) {
+          statusDiv.textContent = "✅ Message envoyé avec succès !";
+          statusDiv.style.color = "#28a745";
+        }
+        form.reset();
+      } else {
+        const errorMsg = data.message || "Erreur inconnue.";
+        console.error("❌ Échec de l'envoi:", errorMsg);
+        if (statusDiv) {
+          statusDiv.textContent = `❌ Échec: ${errorMsg}`;
+          statusDiv.style.color = "#dc3545";
+        }
+      }
+
+    } catch (error) {
+      console.error("⚠️ ERREUR lors de l'envoi:", error.message);
+      console.error("Stack trace:", error);
+      if (statusDiv) {
+        statusDiv.textContent = `❌ ${error.message || "Une erreur est survenue."}`;
+        statusDiv.style.color = "#dc3545";
+      }
+    }
+  });
+
+  console.log("🎯 Gestionnaire de formulaire initialisé et prêt");
+});
