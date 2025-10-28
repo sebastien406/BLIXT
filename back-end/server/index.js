@@ -48,138 +48,6 @@ app.get('/', (req, res) => {
     });
 });
 
-// app.post('/api/contact', async (req, res) => {
-//     const { name, email, phone, message, hp_field, 'g-recaptcha-response': recaptchaToken } = req.body;
-//     console.log('Requête reçue :', { name, email, recaptchaToken });
-
-//     if (hp_field) {
-//         console.log("Honeypot activé. Requête ignorée.");
-//         return res.status(200).json({ success: true, message: "Merci pour votre message." });
-//     }
-
-//     if (!name || !email || !message) {
-//         return res.status(400).json({ success: false, message: "Nom, email et message sont requis." });
-//     }
-
-//     // --- 1. Vérification reCAPTCHA ---
-//     try {
-//         console.log('Vérification reCAPTCHA avec le token :', recaptchaToken);
-//         const verifyURL = `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${recaptchaToken}`;
-//         const recaptchaRes = await fetch(verifyURL, { method: 'POST' });
-//         const recaptchaData = await recaptchaRes.json();
-//         console.log('Réponse de l\'API reCAPTCHA :', recaptchaData);
-
-//         if (!recaptchaData.success) {
-//             console.warn('Échec de la vérification reCAPTCHA :', recaptchaData['error-codes']);
-//             return res.status(400).json({
-//                 success: false,
-//                 message: `Échec reCAPTCHA : ${recaptchaData['error-codes'] ? recaptchaData['error-codes'].join(', ') : 'tentative suspecte détectée.'}`
-//             });
-//         }
-//         if (recaptchaData.score < 0.1) {
-//             console.warn('Score reCAPTCHA trop bas :', recaptchaData.score);
-//             return res.status(400).json({
-//                 success: false,
-//                 message: "Score reCAPTCHA trop bas."
-//             });
-//         }
-//     } catch (err) {
-//         console.error('Erreur lors de la vérification reCAPTCHA:', err);
-//         return res.status(500).json({ success: false, message: "Erreur lors de la vérification du reCAPTCHA." });
-//     } 
-//     // --- 1. Vérification reCAPTCHA test1---
-// // try {
-// //     console.log('Vérification reCAPTCHA avec le token :', recaptchaToken);
-
-// //     // Vérification sécurisée avec body encodé
-// //     const verifyURL = 'https://www.google.com/recaptcha/api/siteverify';
-// //     const params = new URLSearchParams();
-// //     params.append('secret', process.env.RECAPTCHA_SECRET_KEY);
-// //     params.append('response', recaptchaToken);
-
-// //     const recaptchaRes = await fetch(verifyURL, {
-// //         method: 'POST',
-// //         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-// //         body: params
-// //     });
-
-// //     const recaptchaData = await recaptchaRes.json();
-// //     console.log('Réponse de l\'API reCAPTCHA :', recaptchaData);
-
-// //     if (!recaptchaData.success) {
-// //         console.warn('Échec de la vérification reCAPTCHA :', recaptchaData['error-codes']);
-// //         return res.status(400).json({
-// //             success: false,
-// //             message: `Échec reCAPTCHA : ${
-// //                 recaptchaData['error-codes']
-// //                     ? recaptchaData['error-codes'].join(', ')
-// //                     : 'tentative suspecte détectée.'
-// //             }`
-// //         });
-// //     }
-
-// //     if (recaptchaData.score < 0.1) {
-// //         console.warn('Score reCAPTCHA trop bas :', recaptchaData.score);
-// //         return res.status(400).json({
-// //             success: false,
-// //             message: "Score reCAPTCHA trop bas."
-// //         });
-// //     }
-
-// // } catch (err) {
-// //     console.error('Erreur lors de la vérification reCAPTCHA:', err);
-// //     return res.status(500).json({ success: false, message: "Erreur lors de la vérification du reCAPTCHA." });
-// // }
-
-
-//     // ✅ Si le reCAPTCHA est validé → envoi du mail via Mailjet
-//     try {
-//         console.log('📤 Envoi du mail via Mailjet...');
-//         const request = mailjet
-//             .post('send', { version: 'v3.1' })
-//             .request({
-//                 Messages: [
-//                     {
-//                         From: { Email: SENDER_EMAIL, Name: "Formulaire BLIXT" },
-//                         To: [{ Email: DESTINATION_EMAIL, Name: "Équipe BLIXT" }],
-//                         Subject: `Demande de devis BLIXT par ${name}`,
-//                         TextPart: `
-// Nom: ${name}
-// Email: ${email}
-// Téléphone: ${phone || 'Non fourni'}
-
-// Message:
-// ${message}
-//                         `.trim(),
-//                         HTMLPart: `
-//                         <html>
-//                         <body style="font-family: Arial; color: #333;">
-//                         <h2>⚡ Nouvelle demande de devis BLIXT</h2>
-//                         <p><b>👤 Nom:</b> ${name}</p>
-//                         <p><b>📧 Email:</b> ${email}</p>
-//                         <p><b>📱 Téléphone:</b> ${phone || 'Non renseigné'}</p>
-//                         <p><b>💬 Message:</b><br>${message.replace(/\n/g, '<br>')}</p>
-//                         <p style="font-size:12px;color:#777;">📅 Reçu le ${new Date().toLocaleString('fr-FR')}</p>
-//                         </body>
-//                         </html>`
-//                     }
-//                 ]
-//             });
-
-//         await request;
-//         console.log('✅ Email envoyé avec succès !');
-//         return res.status(200).json({ success: true, message: "Message envoyé avec succès." });
-
-//     } catch (error) {
-//         console.error('❌ Erreur Mailjet:', error.statusCode, error.message);
-//         return res.status(500).json({
-//             success: false,
-//             message: `Erreur lors de l'envoi via Mailjet.`
-//         });
-//     }
-// });
-
-
 app.post('/api/contact', async (req, res) => {
     const { name, email, phone, message, hp_field, 'g-recaptcha-response': recaptchaToken } = req.body;
     console.log('Requête reçue :', { name, email, recaptchaToken });
@@ -193,27 +61,11 @@ app.post('/api/contact', async (req, res) => {
         return res.status(400).json({ success: false, message: "Nom, email et message sont requis." });
     }
 
-    // --- Vérification reCAPTCHA (corrigée et conforme à la doc Google) ---
+    // --- 1. Vérification reCAPTCHA ---
     try {
-        if (!recaptchaToken) {
-            console.error("⚠️ Aucun token reCAPTCHA reçu !");
-            return res.status(400).json({ success: false, message: "Token reCAPTCHA manquant." });
-        }
-
         console.log('Vérification reCAPTCHA avec le token :', recaptchaToken);
-
-        // ✅ Version POST officielle
-        const verifyURL = 'https://www.google.com/recaptcha/api/siteverify';
-        const params = new URLSearchParams();
-        params.append('secret', process.env.RECAPTCHA_SECRET_KEY);
-        params.append('response', recaptchaToken);
-
-        const recaptchaRes = await fetch(verifyURL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: params
-        });
-
+        const verifyURL = `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${recaptchaToken}`;
+        const recaptchaRes = await fetch(verifyURL, { method: 'POST' });
         const recaptchaData = await recaptchaRes.json();
         console.log('Réponse de l\'API reCAPTCHA :', recaptchaData);
 
@@ -221,14 +73,9 @@ app.post('/api/contact', async (req, res) => {
             console.warn('Échec de la vérification reCAPTCHA :', recaptchaData['error-codes']);
             return res.status(400).json({
                 success: false,
-                message: `Échec reCAPTCHA : ${
-                    recaptchaData['error-codes']
-                        ? recaptchaData['error-codes'].join(', ')
-                        : 'tentative suspecte détectée.'
-                }`
+                message: `Échec reCAPTCHA : ${recaptchaData['error-codes'] ? recaptchaData['error-codes'].join(', ') : 'tentative suspecte détectée.'}`
             });
         }
-
         if (recaptchaData.score < 0.1) {
             console.warn('Score reCAPTCHA trop bas :', recaptchaData.score);
             return res.status(400).json({
@@ -236,11 +83,54 @@ app.post('/api/contact', async (req, res) => {
                 message: "Score reCAPTCHA trop bas."
             });
         }
-
     } catch (err) {
         console.error('Erreur lors de la vérification reCAPTCHA:', err);
         return res.status(500).json({ success: false, message: "Erreur lors de la vérification du reCAPTCHA." });
-    }
+    } 
+    // --- 1. Vérification reCAPTCHA test1---
+// try {
+//     console.log('Vérification reCAPTCHA avec le token :', recaptchaToken);
+
+//     // Vérification sécurisée avec body encodé
+//     const verifyURL = 'https://www.google.com/recaptcha/api/siteverify';
+//     const params = new URLSearchParams();
+//     params.append('secret', process.env.RECAPTCHA_SECRET_KEY);
+//     params.append('response', recaptchaToken);
+
+//     const recaptchaRes = await fetch(verifyURL, {
+//         method: 'POST',
+//         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+//         body: params
+//     });
+
+//     const recaptchaData = await recaptchaRes.json();
+//     console.log('Réponse de l\'API reCAPTCHA :', recaptchaData);
+
+//     if (!recaptchaData.success) {
+//         console.warn('Échec de la vérification reCAPTCHA :', recaptchaData['error-codes']);
+//         return res.status(400).json({
+//             success: false,
+//             message: `Échec reCAPTCHA : ${
+//                 recaptchaData['error-codes']
+//                     ? recaptchaData['error-codes'].join(', ')
+//                     : 'tentative suspecte détectée.'
+//             }`
+//         });
+//     }
+
+//     if (recaptchaData.score < 0.1) {
+//         console.warn('Score reCAPTCHA trop bas :', recaptchaData.score);
+//         return res.status(400).json({
+//             success: false,
+//             message: "Score reCAPTCHA trop bas."
+//         });
+//     }
+
+// } catch (err) {
+//     console.error('Erreur lors de la vérification reCAPTCHA:', err);
+//     return res.status(500).json({ success: false, message: "Erreur lors de la vérification du reCAPTCHA." });
+// }
+
 
     // ✅ Si le reCAPTCHA est validé → envoi du mail via Mailjet
     try {
@@ -288,6 +178,8 @@ ${message}
         });
     }
 });
+
+
 
 // --- Gestion 404 ---
 app.use((req, res) => {
