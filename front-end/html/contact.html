@@ -8,9 +8,14 @@
     <meta name="description" content="Contactez BLIXT pour un devis gratuit et personnalisé à Bourges.">
   <meta http-equiv="Content-Security-Policy" content="
     default-src 'self';
-    script-src 'self' https://www.google.com https://www.gstatic.com; 
+    script-src 'self' 'unsafe-inline' https://www.google.com https://www.gstatic.com;
+    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+    font-src 'self' https://fonts.gstatic.com;
     frame-src https://www.google.com https://recaptcha.google.com;
-    connect-src 'self' https://www.google.com https://www.gstatic.com https://blixt-mailjet-api.onrender.com;">
+    connect-src 'self' https://www.google.com https://www.gstatic.com https://blixt-mailjet-api.onrender.com;
+    img-src 'self' data: https:;
+">
+
     <title>Contactez BLIXT | Demandez un devis à Bourges</title>
 
     <!-- reCAPTCHA v3 -->
