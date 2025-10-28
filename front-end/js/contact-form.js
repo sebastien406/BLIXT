@@ -104,7 +104,7 @@ console.log("🚀 Script contact-form.js chargé avec succès");
 const API_URL = "https://blixt-mailjet-api.onrender.com/api/contact";
 console.log("🌐 API URL configurée:", API_URL);
 
-const RECAPTCHA_SITE_KEY = "TA_CLE_SITE_RECAPTCHA"; // ⚠️ Remplace ici par ta vraie clé publique (site key)
+const RECAPTCHA_SITE_KEY = "6LcC7_grAAAAANd0w6CgPGfru3hXMv43d_ZypJNR"; // ⚠️ Remplace ici par ta vraie clé publique (site key)
 
 // --- Fonction d’envoi du formulaire ---
 document.addEventListener("DOMContentLoaded", () => {
