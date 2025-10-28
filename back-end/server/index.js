@@ -193,13 +193,12 @@
 // app.listen(PORT, () => {
 //     console.log('🚀 Serveur BLIXT démarré sur le port', PORT);
 // });
-
 import 'dotenv/config'; 
 import express from 'express'; 
 import cors from 'cors'; 
 import Mailjet from 'node-mailjet'; 
 import fetch from 'node-fetch'; 
-import { URLSearchParams } from 'url'; // Nécessaire pour la vérification V3 standard
+import { URLSearchParams } from 'url';
 
 const app = express();
 const PORT = process.env.PORT || 10000;
@@ -248,9 +247,10 @@ app.get('/', (req, res) => {
 
 app.post('/api/contact', async (req, res) => {
     
-    // ⭐ CORRECTION : Récupération des champs classiques et assignation explicite du token
     const { name, email, phone, message, hp_field } = req.body;
-    const recaptchaToken = req.body['g-recaptcha-response']; // <-- C'est la clé envoyée par le frontend
+    const recaptchaToken = req.body['g-recaptcha-response']; // Récupération explicite et sécurisée du token
+    
+    let recaptchaData = {}; // ✅ CORRECTION 1: Déclaration de la variable dans la portée de la fonction
 
     console.log('Requête reçue :', { name, email, recaptchaToken });
 
@@ -259,7 +259,7 @@ app.post('/api/contact', async (req, res) => {
         return res.status(200).json({ success: true, message: "Merci pour votre message." });
     }
 
-    if (!name || !email || !message || !recaptchaToken) { // L'erreur venait d'ici car recaptchaToken était undefined
+    if (!name || !email || !message || !recaptchaToken) {
         return res.status(400).json({ success: false, message: "Nom, email, message et token de sécurité sont requis." });
     }
 
@@ -286,7 +286,8 @@ app.post('/api/contact', async (req, res) => {
             body: params 
         });
         
-        const recaptchaData = await recaptchaRes.json();
+        // ✅ CORRECTION 1: Affectation à la variable sans 'const/let'
+        recaptchaData = await recaptchaRes.json(); 
         console.log('Réponse de l\'API reCAPTCHA V3 standard :', recaptchaData);
         
         if (!recaptchaData.success) {
@@ -311,7 +312,7 @@ app.post('/api/contact', async (req, res) => {
     } 
 
 
-    // ✅ Envoi du mail via Mailjet
+    // ✅ Envoi du mail via Mailjet 
     try {
         console.log('📤 Envoi du mail via Mailjet...');
         const request = mailjet
@@ -354,7 +355,8 @@ Score reCAPTCHA: ${recaptchaData.score}
         return res.status(200).json({ success: true, message: "Message envoyé avec succès." });
 
     } catch (error) {
-        console.error('❌ Erreur Mailjet:', error.statusCode, error.message);
+        // ⭐ CORRECTION 2 : Gestion des logs d'erreur pour éviter le plantage
+        console.error('❌ Erreur Mailjet:', error.statusCode || 'Inconnu', error.message || error); 
         return res.status(500).json({
             success: false,
             message: `Erreur lors de l'envoi via Mailjet.`
