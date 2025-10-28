@@ -194,7 +194,6 @@
 //     console.log('🚀 Serveur BLIXT démarré sur le port', PORT);
 // });
 
-
 import 'dotenv/config'; 
 import express from 'express'; 
 import cors from 'cors'; 
@@ -248,7 +247,11 @@ app.get('/', (req, res) => {
 });
 
 app.post('/api/contact', async (req, res) => {
-    const { name, email, phone, message, hp_field, 'g-recaptcha-response': recaptchaToken } = req.body;
+    
+    // ⭐ CORRECTION : Récupération des champs classiques et assignation explicite du token
+    const { name, email, phone, message, hp_field } = req.body;
+    const recaptchaToken = req.body['g-recaptcha-response']; // <-- C'est la clé envoyée par le frontend
+
     console.log('Requête reçue :', { name, email, recaptchaToken });
 
     if (hp_field) {
@@ -256,7 +259,7 @@ app.post('/api/contact', async (req, res) => {
         return res.status(200).json({ success: true, message: "Merci pour votre message." });
     }
 
-    if (!name || !email || !message || !recaptchaToken) {
+    if (!name || !email || !message || !recaptchaToken) { // L'erreur venait d'ici car recaptchaToken était undefined
         return res.status(400).json({ success: false, message: "Nom, email, message et token de sécurité sont requis." });
     }
 
