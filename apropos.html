@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Découvrez l'histoire de BLIXT">
+    <meta name="description" content="Découvrez l'histoire de BLIXT, notre engagement envers la qualité et la durabilité. Une équipe d'électriciens experts à votre service dans le Cher.">
     <title>À propos de BLIXT | Votre électricien à Bourges</title>
     
-    <link rel="stylesheet" href="../css/base.css">
-    <link rel="stylesheet" href="../css/modules/header.css">
-    <link rel="stylesheet" href="../css/modules/footer.css">
-    <link rel="stylesheet" href="../css/modules/bouton.css">
-    <link rel="stylesheet" href="../css/modules/menu-burger.css">
-    <link rel="stylesheet" href="../css/pages/apropos.css">
+    <link rel="stylesheet" href="front-end/css/base.css">
+    <link rel="stylesheet" href="front-end/css/modules/header.css">
+    <link rel="stylesheet" href="front-end/css/modules/footer.css">
+    <link rel="stylesheet" href="front-end/css/modules/bouton.css">
+    <link rel="stylesheet" href="front-end/css/modules/menu-burger.css">
+    <link rel="stylesheet" href="front-end/css/pages/apropos.css">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,27 +19,7 @@
 </head>  
 <body>
 
- <header>
-        <div class="logo-container">
-            <img src="../images/logo-transparent.png" alt="Logo de Blixt" class="logo">
-        </div>
-
-        <button class="menu-burger-bouton" aria-label="Ouvrir le menu de navigation">
-            <span class="ligne-burger"></span>
-            <span class="ligne-burger"></span>
-            <span class="ligne-burger"></span>
-        </button>
-
-        <nav class="nav-menu">
-            <ul>
-                <li><a href="index.html">Accueil</a></li>
-                <li><a href="realisation.html">Réalisations</a></li>
-                <li><a href="services.html">Services</a></li>
-                <li><a href="apropos.html">À propos</a></li>
-                <li><a href="contact.html">Contact</a></li>
-            </ul>
-        </nav>
-    </header>
+ <header id="global-header"></header>
 
     <main>
     <section class="entete-page">
@@ -56,7 +36,7 @@
         <div class="conteneur">
             <div class="histoire-grille">
                 <div class="image-boite">
-                    <img src="../images/clown.jpg" alt="Portrait d'Antoine Nivelet" class="image-histoire">
+                    <img src="front-end/images/clown.jpg" alt="Portrait d'Antoine Nivelet" class="image-histoire">
                     <div class="image-legende">Moi c'est LAPIN!!!!</div>
                 </div>
                 <div class="histoire-texte">
@@ -74,17 +54,17 @@
             <div class="conteneur-flex">
                 <div class="certif-bloc carte">
                     <div class="icone-boite">
-                        <img src="../images/icone-certif.png" alt="Icône certifications" class="icone">
+                        <img src="front-end/images/icone-certif.png" alt="Icône certifications" class="icone">
                     </div>
                     <h3>Nos certifications : Gage de Confiance</h3>
                     <p>Nous ne laissons rien au hasard. Nos certifications **Qualifelec** et **RGE** ne sont pas de simples labels, mais la preuve concrète de notre engagement envers l'excellence technique, la sécurité et l'environnement. Avec BLIXT, vous choisissez un partenaire reconnu pour son expertise et sa conformité aux normes les plus exigeantes.</p>
                     <div class="logos-certifs">
-                        <img src="../images/qualifelec.png" alt="Logo Qualifelec" class="logo-certif">
+                        <img src="front-end/images/qualifelec.png" alt="Logo Qualifelec" class="logo-certif">
                     </div>
                 </div>
                 <div class="valeurs-bloc carte">
                     <div class="icone-boite">
-                           <img src="../images/icons8-coeur-rouge-94.png" alt="Icône valeurs" class="icone">
+                           <img src="front-end/images/icons8-coeur-rouge-94.png" alt="Icône valeurs" class="icone">
                     </div>
                     <h3>Nos valeurs : L'Humain au cœur</h3>
                     <p>1 Professionnalisme : Chaque intervention est une démonstration de notre expertise.</p>
@@ -113,47 +93,9 @@
     </section>
 </main>
 
-    <footer class="site-footer">
-        <div class="footer-container">
-            <div class="logo-container-footer">
-                <img src="../images/Logo_B_-_Blixt-transparent.png" alt="Logo de Blixt" class="logo">
-            </div>
-            <div class="footer-section">
-                <h3>À propos de BLIXT</h3>
-                <p>Votre partenaire de confiance pour des solutions électriques innovantes et durables à Bourges et ses environs. Ensemble construisons l'avenir.</p><br>
-                <p><a href="">Mentions légales</a></p>
-                <p><a href="">Politique de confidentialités</a></p>
-            </div>
-            <div class="footer-section ">
-                <h3>Liens rapides</h3>
-                <ul>
-                    <li><a href="index.html">Accueil</a></li>
-                <li><a href="front-end/html/realisation.html">Réalisations</a></li>
-                <li><a href="front-end/html/services.html">Services</a></li>
-                <li><a href="front-end/html/apropos.html">À propos</a></li>
-                <li><a href="front-end/html/contact.html">Contact</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h3>Contact</h3>
-                <p>Adresse : 123 Rue de l'Électricité, 18000 Bourges</p>
-                <p>Téléphone : <a href="tel:+33123456789">01 23 45 67 89</a></p>
-                <p>Email : <a href="mailto:contact@blixt.fr">contact@blixt.fr</a></p>
-            </div>
-            <div class="footer-section-social">
-                <h3>Suivez-nous</h3>
-                <div class="social-icons">
-                    <a href="#" aria-label="Facebook"><img src="../images/icons8-facebook-48.png" alt="Facebook"></a>
-                    <a href="#" aria-label="Instagram"><img src="../images/icons8-instagram-48.png" alt="Instagram"></a>
-                    <a href="https://www.linkedin.com/company/sas-blixt/" aria-label="linkedin"><img src="../images/icons8-linkedin-48.png" alt="Instagram"></a>
-                </div>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>© 2025 BLIXT. Tous droits réservés. Site réalisé par la team Casse Grain.</p>
-            <a href="lapin.html"><img src="../images/logo lapin2.png" alt="" srcset=""></a>
-        </div>
-    </footer>
-    <script defer src="../js/burger.js"></script>
+    <footer id="global-footer" class="site-footer"></footer>
+
+    <script src="front-end/js/burger.js"></script>
+    <script src="front-end/js/include-elements.js"></script>
 </body>
 </html>

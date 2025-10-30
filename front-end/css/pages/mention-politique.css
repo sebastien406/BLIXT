@@ -1,0 +1,23 @@
+.politique-confidentialite{
+    margin: 200px;
+}
+
+.mentions-legales {
+    margin: 200px;
+}
+
+ h2 {
+    color: var(--accent-color);
+}
+
+@media (max-width: 768px) {
+  .politique-confidentialite{
+    margin: 80px 20px;
+    text-align: center;
+}
+
+.mentions-legales {
+    margin: 80px 20px;
+    text-align: center;
+} 
+}

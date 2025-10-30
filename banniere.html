@@ -1,0 +1,161 @@
+<style>
+    body { background-color: #111; display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh; margin: 0; color: white; font-family: Arial, sans-serif; }
+    canvas { border: 3px solid #00FFFF; background-color: #000; box-shadow: 0 0 15px rgba(0, 255, 255, 0.5); }
+    button { margin-top: 20px; padding: 10px 20px; font-size: 16px; background-color: #00FFFF; border: none; cursor: pointer; border-radius: 5px; }
+</style>
+
+<h2>Simulation de la Bannière BLIXT - Flux d'Énergie Réactif (V2)</h2>
+<canvas id="blixtBannerV2" width="600" height="200"></canvas>
+<button id="triggerButton">Simuler un Événement Puissant (Clic)</button>
+
+<script>
+    const canvas = document.getElementById('blixtBannerV2');
+    const ctx = canvas.getContext('2d');
+    const triggerButton = document.getElementById('triggerButton');
+
+    const W = canvas.width;
+    const H = canvas.height;
+
+    let phase = 0; // 0: Repos, 1: Flux, 2: Impact, 3: Révélation
+    let fluxProgress = 0; // 0 à 1
+    let flashIntensity = 0; // 0 à 1.5
+    let sloganAlpha = 0;
+
+    const PRIMARY_COLOR = '#00FFFF'; // Cyan Vif
+    const ACCENT_COLOR = '#FFD700'; // Jaune Or (pour le logo final)
+    const BLIXT_TEXT = "BLIXT";
+    const SLOGAN_TEXT = "Chargez vos Émotions.";
+
+
+    // --- Fonctions de Dessin ---
+
+    function drawRestingState() {
+        ctx.fillStyle = '#000';
+        ctx.fillRect(0, 0, W, H);
+
+        ctx.font = 'bold 60px Arial';
+        ctx.textAlign = 'center';
+        // Pulsation en Cyan
+        const pulse = 0.7 + Math.sin(Date.now() * 0.005) * 0.2;
+        ctx.fillStyle = `rgba(0, 255, 255, ${pulse})`;
+        ctx.shadowColor = PRIMARY_COLOR;
+        ctx.shadowBlur = 10;
+        ctx.fillText(BLIXT_TEXT, W / 2, H / 2 + 20);
+        ctx.shadowBlur = 0;
+    }
+
+    function drawFlux() {
+        drawRestingState(); // Garde le fond noir
+
+        // Lignes d'énergie convergentes (Cyan)
+        const density = 20; // Nombre de lignes
+        ctx.strokeStyle = PRIMARY_COLOR;
+        ctx.lineWidth = 1 + fluxProgress * 2;
+        
+        for (let i = 0; i < density; i++) {
+            const y = (i / density) * H + Math.sin(Date.now() * 0.02 + i) * 5 * (1 - fluxProgress);
+            
+            // Flux Gauche (accélère vers le centre)
+            ctx.beginPath();
+            ctx.moveTo(0, y);
+            ctx.lineTo(W / 2 * fluxProgress, y);
+            ctx.stroke();
+
+            // Flux Droit (accélère vers le centre)
+            ctx.beginPath();
+            ctx.moveTo(W, y);
+            ctx.lineTo(W - (W / 2 * fluxProgress), y);
+            ctx.stroke();
+        }
+
+        // L'énergie devient plus brillante au centre
+        ctx.fillStyle = `rgba(0, 255, 255, ${fluxProgress * 0.5})`;
+        ctx.fillRect(W/2 - 10 * fluxProgress, 0, 20 * fluxProgress, H);
+    }
+
+    function drawImpact() {
+        // Flash Blanc Intense au centre
+        ctx.fillStyle = `rgba(255, 255, 255, ${Math.min(1, flashIntensity)})`;
+        ctx.fillRect(0, 0, W, H);
+
+        // Reste du code pour dessiner les étincelles ou les arcs électriques
+        ctx.fillStyle = `rgba(0, 255, 255, ${1.5 - flashIntensity})`; // L'onde s'estompe
+        ctx.fillRect(0, 0, W, H);
+    }
+
+    function drawReveal() {
+        ctx.fillStyle = '#000';
+        ctx.fillRect(0, 0, W, H);
+
+        // Logo BLIXT (stable en Jaune Or)
+        ctx.font = 'bold 60px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillStyle = ACCENT_COLOR;
+        ctx.shadowColor = ACCENT_COLOR;
+        ctx.shadowBlur = 15 * sloganAlpha;
+        ctx.fillText(BLIXT_TEXT, W / 2, H / 2 - 10);
+
+        // Slogan avec transparence
+        ctx.font = '24px Arial';
+        ctx.fillStyle = `rgba(0, 255, 255, ${sloganAlpha})`; // Cyan
+        ctx.shadowColor = PRIMARY_COLOR;
+        ctx.shadowBlur = 10 * sloganAlpha;
+        ctx.fillText(SLOGAN_TEXT, W / 2, H / 2 + 35);
+        ctx.shadowBlur = 0;
+    }
+
+
+    // --- Moteur d'Animation ---
+
+    function animate() {
+        requestAnimationFrame(animate);
+
+        switch(phase) {
+            case 0: // Repos
+                drawRestingState();
+                break;
+
+            case 1: // Flux
+                drawFlux();
+                fluxProgress += 0.04;
+                if (fluxProgress >= 1) {
+                    fluxProgress = 1;
+                    phase = 2; // Impact
+                    flashIntensity = 0;
+                }
+                break;
+
+            case 2: // Impact
+                drawImpact();
+                flashIntensity += 0.2; // Très rapide
+                if (flashIntensity >= 1.5) {
+                    phase = 3; // Révélation
+                    sloganAlpha = 0;
+                }
+                break;
+
+            case 3: // Révélation
+                drawReveal();
+                sloganAlpha += 0.05;
+                if (sloganAlpha >= 1) {
+                    sloganAlpha = 1;
+                    // Affichage pendant 3 secondes
+                    setTimeout(() => {
+                        phase = 0;
+                        fluxProgress = 0;
+                    }, 3000); 
+                }
+                break;
+        }
+    }
+
+    animate();
+
+    // Déclencheur
+    triggerButton.addEventListener('click', () => {
+        if (phase === 0) {
+            phase = 1;
+        }
+    });
+
+</script>

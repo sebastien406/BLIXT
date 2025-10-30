@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Installation électrique complète pour une maison neuve et moderne.">
+    <meta name="description" content="Voir nos projets électriques réussis à Bourges et dans le Cher. Expertise en résidentiel, tertiaire et industriel. Qualité BLIXT garantie.">
     <title>Réalisation : Maison résidentielle moderne | BLIXT</title>
     
-    <link rel="stylesheet" href="../css/base.css">
-    <link rel="stylesheet" href="../css/modules/header.css">
-    <link rel="stylesheet" href="../css/modules/footer.css">
-    <link rel="stylesheet" href="../css/modules/bouton.css">
-    <link rel="stylesheet" href="../css/modules/menu-burger.css">
-    <link rel="stylesheet" href="../css/pages/realisation.css">
-    <link rel="stylesheet" href="../css/pages/realisationprojet.css">
+    <link rel="stylesheet" href="front-end/css/base.css">
+    <link rel="stylesheet" href="front-end/css/modules/header.css">
+    <link rel="stylesheet" href="front-end/css/modules/footer.css">
+    <link rel="stylesheet" href="front-end/css/modules/bouton.css">
+    <link rel="stylesheet" href="front-end/css/modules/menu-burger.css">
+    <link rel="stylesheet" href="front-end/css/pages/realisation.css">
+    <link rel="stylesheet" href="front-end/css/pages/realisationprojet.css">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,27 +20,7 @@
 </head>
 <body>
 
-    <header>
-        <div class="logo-container">
-            <img src="../images/logo-transparent.png" alt="Logo de Blixt" class="logo">
-        </div>
-
-        <button class="menu-burger-bouton" aria-label="Ouvrir le menu de navigation">
-            <span class="ligne-burger"></span>
-            <span class="ligne-burger"></span>
-            <span class="ligne-burger"></span>
-        </button>
-
-        <nav class="nav-menu">
-            <ul>
-                <li><a href="index.html">Accueil</a></li>
-                <li><a href="realisation.html">Réalisations</a></li>
-                <li><a href="services.html">Services</a></li>
-                <li><a href="apropos.html">À propos</a></li>
-                <li><a href="contact.html">Contact</a></li>
-            </ul>
-        </nav>
-    </header>
+    <header id="global-header"></header>
 
 
     <main>
@@ -72,10 +52,10 @@
             <div class="conteneur">
                 <h2 class="titre-galerie">Aperçu du projet en images</h2>
                 <div class="galerie-grille" id="galerie-grille-mobile">
-                    <img src="../images/boitiersolaire.jpg" alt="Vue de l'installation électrique principale" class="galerie-image">
-                    <img src="../images/domotique.jpg" alt="Détail du tableau électrique" class="galerie-image">
-                    <img src="../images/copain.png" alt="Installation d'un éclairage de salon intelligent" class="galerie-image">
-                    <img src="../images/entreprisechantiert.jpg" alt="Pose des interrupteurs de domotique" class="galerie-image">
+                    <img src="front-end/images/boitiersolaire.jpg" alt="Vue de l'installation électrique principale" class="galerie-image">
+                    <img src="front-end/images/domotique.jpg" alt="Détail du tableau électrique" class="galerie-image">
+                    <img src="front-end/images/copain.png" alt="Installation d'un éclairage de salon intelligent" class="galerie-image">
+                    <img src="front-end/images/entreprisechantiert.jpg" alt="Pose des interrupteurs de domotique" class="galerie-image">
                 </div>
                 
                 <div class="galerie-points">
@@ -93,49 +73,12 @@
         </section>
     </main>
 
-    <footer class="site-footer">
-        <div class="footer-container">
-            <div class="logo-container-footer">
-                <img src="../images/Logo_B_-_Blixt-transparent.png" alt="Logo de Blixt" class="logo">
-            </div>
-            <div class="footer-section">
-                <h3>À propos de BLIXT</h3>
-                <p>Votre partenaire de confiance pour des solutions électriques innovantes et durables à Bourges et ses environs. Ensemble construisons l'avenir.</p><br>
-                <p><a href="">Mentions légales</a></p>
-                <p><a href="">Politique de confidentialités</a></p>
-            </div>
-            <div class="footer-section ">
-                <h3>Liens rapides</h3>
-                <ul>
-                    <li><a href="index.html">Accueil</a></li>
-                <li><a href="realisation.html">Réalisations</a></li>
-                <li><a href="services.html">Services</a></li>
-                <li><a href="apropos.html">À propos</a></li>
-                <li><a href="contact.html">Contact</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h3>Contact</h3>
-                <p>Adresse : 123 Rue de l'Électricité, 18000 Bourges</p>
-                <p>Téléphone : <a href="tel:+33123456789">01 23 45 67 89</a></p>
-                <p>Email : <a href="mailto:contact@blixt.fr">contact@blixt.fr</a></p>
-            </div>
-            <div class="footer-section-social">
-                <h3>Suivez-nous</h3>
-                <div class="social-icons">
-                    <a href="#" aria-label="Facebook"><img src="../images/icons8-facebook-48.png" alt="Facebook"></a>
-                    <a href="#" aria-label="Instagram"><img src="../images/icons8-instagram-48.png" alt="Instagram"></a>
-                    <a href="https://www.linkedin.com/company/sas-blixt/" aria-label="linkedin"><img src="../images/icons8-linkedin-48.png" alt="Instagram"></a>
-                </div>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>© 2025 BLIXT. Tous droits réservés. Site réalisé par la team Casse Grain.</p>
-            <a href="lapin.html"><img src="../images/logo lapin2.png" alt="" srcset=""></a>
-        </div>
-    </footer>
-    <script defer src="../js/galerie.js"></script>
-    <script defer src="../js/burger.js"></script>
-    s
+    <footer id="global-footer" class="site-footer"></footer>
+
+    <script src="front-end/js/burger.js"></script>
+    <script src="front-end/js/include-elements.js"></script>
+    <script defer src="front-end/js/galerie.js"></script>
+    <script defer src="front-end/js/burger.js"></script>
+    
 </body>
 </html>

@@ -63,14 +63,13 @@ app.post('/api/contact', async (req, res) => {
 
     // --- 1. Vérification reCAPTCHA ---
     try {
-        console.log('Vérification reCAPTCHA avec le token :', recaptchaToken);
         const start=Date.now()
         const verifyURL = `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${recaptchaToken}`;
         const recaptchaRes = await fetch(verifyURL, { method: 'POST' });
         const end=Date.now()
         console.log(` Temps d'exécution : ${end - start} ms`)
         const recaptchaData = await recaptchaRes.json();
-        console.log('Réponse de l\'API reCAPTCHA :', recaptchaData);
+     
 
         if (!recaptchaData.success) {
             console.warn('Échec de la vérification reCAPTCHA :', recaptchaData['error-codes']);
