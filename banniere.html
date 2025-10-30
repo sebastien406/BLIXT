@@ -1,42 +1,65 @@
 <style>
     body { background-color: #111; display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh; margin: 0; color: white; font-family: Arial, sans-serif; }
     canvas { border: 3px solid #00FFFF; background-color: #000; box-shadow: 0 0 15px rgba(0, 255, 255, 0.5); }
-    button { margin-top: 20px; padding: 10px 20px; font-size: 16px; background-color: #00FFFF; border: none; cursor: pointer; border-radius: 5px; }
+    button { margin-top: 20px; padding: 10px 20px; font-size: 16px; background-color: #00FFFF; border: none; cursor: pointer; border-radius: 5px; color: #000; font-weight: bold; }
 </style>
 
-<h2>Simulation de la Bannière BLIXT - Flux d'Énergie Réactif (V2)</h2>
-<canvas id="blixtBannerV2" width="600" height="200"></canvas>
-<button id="triggerButton">Simuler un Événement Puissant (Clic)</button>
+<h2>Simulation de la Bannière BLIXT - Éclair Instantané (V5)</h2>
+<canvas id="blixtBannerV5" width="600" height="200"></canvas>
+<button id="triggerButtonV5">Déclencher l'Animation (But !)</button>
 
 <script>
-    const canvas = document.getElementById('blixtBannerV2');
+    const canvas = document.getElementById('blixtBannerV5');
     const ctx = canvas.getContext('2d');
-    const triggerButton = document.getElementById('triggerButton');
+    const triggerButton = document.getElementById('triggerButtonV5');
 
     const W = canvas.width;
     const H = canvas.height;
 
-    let phase = 0; // 0: Repos, 1: Flux, 2: Impact, 3: Révélation
-    let fluxProgress = 0; // 0 à 1
-    let flashIntensity = 0; // 0 à 1.5
+    let phase = 0; // 0: Repos, 1: Éclair, 2: Pause Noire, 3: Révélation
+    let flashCounter = 0; // Compteur pour limiter la durée de l'éclair
     let sloganAlpha = 0;
+    let flashStartTime = 0; 
 
     const PRIMARY_COLOR = '#00FFFF'; // Cyan Vif
-    const ACCENT_COLOR = '#FFD700'; // Jaune Or (pour le logo final)
     const BLIXT_TEXT = "BLIXT";
-    const SLOGAN_TEXT = "Chargez vos Émotions.";
+    const SLOGAN_TEXT = "Le Coup de Génie.";
+    const PAUSE_DURATION = 150; // Durée de la pause noire en ms
 
+    // --- Fonctions de Dessin d'Éléments ---
 
-    // --- Fonctions de Dessin ---
+    function drawLightningPath(alpha) {
+        ctx.lineWidth = 15;
+        // La couleur principale de l'éclair est BLANCHE pour le contraste
+        ctx.strokeStyle = `rgba(255, 255, 255, ${alpha * 0.9})`; 
+        ctx.shadowColor = PRIMARY_COLOR; // Mais le halo est CYAN
+        ctx.shadowBlur = 40 * alpha; // Blur intense
+        
+        // Chemin de l'éclair
+        ctx.beginPath();
+        ctx.moveTo(W * 0.05, H * 0.1); 
+        ctx.lineTo(W * 0.3, H * 0.7);
+        ctx.lineTo(W * 0.2, H * 0.3);
+        ctx.lineTo(W * 0.7, H * 0.8);
+        ctx.lineTo(W * 0.5, H * 0.4);
+        ctx.lineTo(W * 0.95, H * 0.9); 
+        ctx.stroke();
 
+        ctx.lineWidth = 5;
+        ctx.strokeStyle = `rgba(0, 255, 255, ${alpha * 1.5})`; // Ligne intérieure Cyan
+        ctx.stroke();
+
+        ctx.shadowBlur = 0; 
+    }
+    
     function drawRestingState() {
         ctx.fillStyle = '#000';
         ctx.fillRect(0, 0, W, H);
 
         ctx.font = 'bold 60px Arial';
         ctx.textAlign = 'center';
-        // Pulsation en Cyan
-        const pulse = 0.7 + Math.sin(Date.now() * 0.005) * 0.2;
+        // Pulsation en Cyan Doux
+        const pulse = 0.3 + Math.sin(Date.now() * 0.005) * 0.1;
         ctx.fillStyle = `rgba(0, 255, 255, ${pulse})`;
         ctx.shadowColor = PRIMARY_COLOR;
         ctx.shadowBlur = 10;
@@ -44,64 +67,48 @@
         ctx.shadowBlur = 0;
     }
 
-    function drawFlux() {
-        drawRestingState(); // Garde le fond noir
+    // --- Fonctions de Phase ---
 
-        // Lignes d'énergie convergentes (Cyan)
-        const density = 20; // Nombre de lignes
-        ctx.strokeStyle = PRIMARY_COLOR;
-        ctx.lineWidth = 1 + fluxProgress * 2;
+    function drawLightningPhase() {
+        // État de l'éclair : PLEINE INTENSITÉ
+        drawRestingState(); 
+        drawLightningPath(1.5); // Toujours à fond
+
+        flashCounter++;
         
-        for (let i = 0; i < density; i++) {
-            const y = (i / density) * H + Math.sin(Date.now() * 0.02 + i) * 5 * (1 - fluxProgress);
-            
-            // Flux Gauche (accélère vers le centre)
-            ctx.beginPath();
-            ctx.moveTo(0, y);
-            ctx.lineTo(W / 2 * fluxProgress, y);
-            ctx.stroke();
-
-            // Flux Droit (accélère vers le centre)
-            ctx.beginPath();
-            ctx.moveTo(W, y);
-            ctx.lineTo(W - (W / 2 * fluxProgress), y);
-            ctx.stroke();
+        // L'éclair ne reste que 2 trames d'animation (ultra-court)
+        if (flashCounter > 2) { 
+            flashCounter = 0;
+            phase = 2; // Passe à la pause noire immédiatement
+            flashStartTime = Date.now(); 
         }
-
-        // L'énergie devient plus brillante au centre
-        ctx.fillStyle = `rgba(0, 255, 255, ${fluxProgress * 0.5})`;
-        ctx.fillRect(W/2 - 10 * fluxProgress, 0, 20 * fluxProgress, H);
     }
 
-    function drawImpact() {
-        // Flash Blanc Intense au centre
-        ctx.fillStyle = `rgba(255, 255, 255, ${Math.min(1, flashIntensity)})`;
-        ctx.fillRect(0, 0, W, H);
-
-        // Reste du code pour dessiner les étincelles ou les arcs électriques
-        ctx.fillStyle = `rgba(0, 255, 255, ${1.5 - flashIntensity})`; // L'onde s'estompe
+    function drawBlackPause() {
+        ctx.fillStyle = '#000';
         ctx.fillRect(0, 0, W, H);
     }
 
-    function drawReveal() {
+    function drawRevealPhase() {
         ctx.fillStyle = '#000';
         ctx.fillRect(0, 0, W, H);
 
-        // Logo BLIXT (stable en Jaune Or)
+        // Logo BLIXT (Blanc Vif)
         ctx.font = 'bold 60px Arial';
         ctx.textAlign = 'center';
-        ctx.fillStyle = ACCENT_COLOR;
-        ctx.shadowColor = ACCENT_COLOR;
-        ctx.shadowBlur = 15 * sloganAlpha;
+        
+        ctx.fillStyle = `rgba(255, 255, 255, ${sloganAlpha})`;
+        ctx.shadowColor = PRIMARY_COLOR;
+        ctx.shadowBlur = 20 * sloganAlpha;
         ctx.fillText(BLIXT_TEXT, W / 2, H / 2 - 10);
 
-        // Slogan avec transparence
+        // Slogan (Cyan)
         ctx.font = '24px Arial';
-        ctx.fillStyle = `rgba(0, 255, 255, ${sloganAlpha})`; // Cyan
-        ctx.shadowColor = PRIMARY_COLOR;
-        ctx.shadowBlur = 10 * sloganAlpha;
+        ctx.fillStyle = `rgba(0, 255, 255, ${sloganAlpha * 0.8})`; 
         ctx.fillText(SLOGAN_TEXT, W / 2, H / 2 + 35);
         ctx.shadowBlur = 0;
+        
+        sloganAlpha += 0.08; // Révélation rapide
     }
 
 
@@ -111,38 +118,30 @@
         requestAnimationFrame(animate);
 
         switch(phase) {
-            case 0: // Repos
+            case 0: 
                 drawRestingState();
                 break;
 
-            case 1: // Flux
-                drawFlux();
-                fluxProgress += 0.04;
-                if (fluxProgress >= 1) {
-                    fluxProgress = 1;
-                    phase = 2; // Impact
-                    flashIntensity = 0;
+            case 1: // Éclair : 2 trames de flash
+                drawLightningPhase();
+                break;
+            
+            case 2: // Pause Noire
+                drawBlackPause();
+                if (Date.now() - flashStartTime > PAUSE_DURATION) { 
+                    phase = 3; 
+                    sloganAlpha = 0; // Réinitialise l'opacité pour la révélation
                 }
                 break;
 
-            case 2: // Impact
-                drawImpact();
-                flashIntensity += 0.2; // Très rapide
-                if (flashIntensity >= 1.5) {
-                    phase = 3; // Révélation
-                    sloganAlpha = 0;
-                }
-                break;
-
-            case 3: // Révélation
-                drawReveal();
-                sloganAlpha += 0.05;
+            case 3: // Révélation du Message
+                drawRevealPhase();
                 if (sloganAlpha >= 1) {
                     sloganAlpha = 1;
                     // Affichage pendant 3 secondes
                     setTimeout(() => {
                         phase = 0;
-                        fluxProgress = 0;
+                        flashCounter = 0;
                     }, 3000); 
                 }
                 break;

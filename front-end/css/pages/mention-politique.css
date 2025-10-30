@@ -1,5 +1,6 @@
 .politique-confidentialite{
     margin: 200px;
+   
 }
 
 .mentions-legales {
@@ -7,6 +8,7 @@
 }
 
  h2 {
+     text-align: left;
     color: var(--accent-color);
 }
 
@@ -20,4 +22,7 @@
     margin: 80px 20px;
     text-align: center;
 } 
+h2 {
+    text-align: center;
+}
 }
