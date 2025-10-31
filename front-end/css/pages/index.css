@@ -54,6 +54,7 @@
     margin-bottom: 60px;
 }
 .bandeau-clients {
+    
     background-color: var(--accent-color);
     overflow: hidden;
     position: relative;
@@ -62,9 +63,10 @@
 .curseur-clients { 
     display: flex;
     white-space: nowrap;
-    animation: scrollLogos 25s linear infinite;
+    animation: scrollLogos 90s linear infinite;
     width: fit-content;
     padding-bottom: 30px;
+    
 }
 .curseur-clients:hover { 
     animation-play-state: paused;
@@ -78,16 +80,16 @@ h2 {
 .diapo-logos { 
     display: flex;
     align-items: center;
+   
 }
 .diapo-logos img { 
-    height: 60px;
+    height: 80px;
     margin: 0 40px;
-    filter: grayscale(100%) opacity(0.7);
+    filter:  opacity(1);
     transition: filter 0.3s ease;
+    
 }
-.diapo-logos img:hover { 
-    filter: grayscale(0%) opacity(1);
-}
+
 
 @keyframes scrollLogos {
     from { transform: translateX(-100%); }
