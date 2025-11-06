@@ -1,160 +1,331 @@
-<style>
-    body { background-color: #111; display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh; margin: 0; color: white; font-family: Arial, sans-serif; }
-    canvas { border: 3px solid #00FFFF; background-color: #000; box-shadow: 0 0 15px rgba(0, 255, 255, 0.5); }
-    button { margin-top: 20px; padding: 10px 20px; font-size: 16px; background-color: #00FFFF; border: none; cursor: pointer; border-radius: 5px; color: #000; font-weight: bold; }
-</style>
 
-<h2>Simulation de la Bannière BLIXT - Éclair Instantané (V5)</h2>
-<canvas id="blixtBannerV5" width="600" height="200"></canvas>
-<button id="triggerButtonV5">Déclencher l'Animation (But !)</button>
+
+<style>
+/* 1. CORRIGÉ : Utilise 'body' au lieu de '.body' */
+body { 
+    background-color: #1a1a1a; 
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center; 
+    align-items: center; 
+    min-height: 100vh; 
+    margin: 0; 
+    color: white; 
+    font-family: 'Montserrat', sans-serif; 
+} /* Ce bloc est maintenant propre */
+
+canvas { 
+    border: 5px solid #00FFFF; /* Bordure Cyan */
+    background-color: #000; 
+    box-shadow: 0 0 30px rgba(0, 255, 255, 0.7); 
+    width: 90vw; /* Rend la bannière grande pour la simulation */
+    max-width: 900px;
+    height: auto;
+} /* Ce bloc est propre */
+
+button { 
+    margin-top: 30px; 
+    padding: 15px 30px; 
+    font-size: 18px; 
+    background-color: #00FFFF; 
+    border: none; 
+    cursor: pointer; 
+    border-radius: 8px; 
+    color: #000; 
+    font-weight: bold;
+    transition: all 0.2s;
+} /* La suppression du point-virgule en trop est ici. */
+
+button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px #00FFFF;
+}
+</style>
+<h2>BLIXT | Simulation Statique 6m x 2m (Ratio 3:1)</h2>
+<canvas id="blixtStadiumAd" width="900" height="300"></canvas>
+<button id="triggerBlixtAd">Déclencher l'Animation (L'Éclair !)</button>
 
 <script>
-    const canvas = document.getElementById('blixtBannerV5');
-    const ctx = canvas.getContext('2d');
-    const triggerButton = document.getElementById('triggerButtonV5');
+    const canvas = document.getElementById('blixtStadiumAd');
+    const ctx = canvas.getContext('2d');
 
-    const W = canvas.width;
-    const H = canvas.height;
+    const W = canvas.width;
+    const H = canvas.height;
 
-    let phase = 0; // 0: Repos, 1: Éclair, 2: Pause Noire, 3: Révélation
-    let flashCounter = 0; // Compteur pour limiter la durée de l'éclair
-    let sloganAlpha = 0;
-    let flashStartTime = 0; 
+    const PRIMARY_COLOR = '#00FFFF'; // Bleu Turquoise/Cyan
+    const TEXT_BLIXT = "BLIXT";
+    const TEXT_SLOGAN = "Electricité générale";
 
-    const PRIMARY_COLOR = '#00FFFF'; // Cyan Vif
-    const BLIXT_TEXT = "BLIXT";
-    const SLOGAN_TEXT = "Le Coup de Génie.";
-    const PAUSE_DURATION = 150; // Durée de la pause noire en ms
+    // --- Variables d'Animation ---
+    let phase = 0; // 0: But, 1: Éclair, 2: Projection, 3: Révélation
+    let lightningAlpha = 0;
+    let projectionRadius = 0;
+    let textAlpha = 0;
+    let animationStartTime = 0;
 
-    // --- Fonctions de Dessin d'Éléments ---
+    // --- Éléments de la Scène ---
+    const GOAL_FRONT_X = W * 0.2; // Position X du poteau avant gauche
+    const GOAL_FRONT_Y_TOP = H * 0.4; // Position Y du haut de la barre transversale
+    const GOAL_WIDTH = W * 0.6; // Largeur du but
+    const GOAL_HEIGHT = H * 0.4; // Hauteur du but
+    const GOAL_DEPTH = W * 0.08; // Profondeur apparente du but
+    
+    const GOAL_FRONT_Y_BOTTOM = GOAL_FRONT_Y_TOP + GOAL_HEIGHT;
 
-    function drawLightningPath(alpha) {
-        ctx.lineWidth = 15;
-        // La couleur principale de l'éclair est BLANCHE pour le contraste
-        ctx.strokeStyle = `rgba(255, 255, 255, ${alpha * 0.9})`; 
-        ctx.shadowColor = PRIMARY_COLOR; // Mais le halo est CYAN
-        ctx.shadowBlur = 40 * alpha; // Blur intense
-        
-        // Chemin de l'éclair
-        ctx.beginPath();
-        ctx.moveTo(W * 0.05, H * 0.1); 
-        ctx.lineTo(W * 0.3, H * 0.7);
-        ctx.lineTo(W * 0.2, H * 0.3);
-        ctx.lineTo(W * 0.7, H * 0.8);
-        ctx.lineTo(W * 0.5, H * 0.4);
-        ctx.lineTo(W * 0.95, H * 0.9); 
-        ctx.stroke();
+    // Coordonnées des coins du but (vues 2D pour simuler la 3D)
+    const p_frontLeft = { x: GOAL_FRONT_X, y: GOAL_FRONT_Y_TOP };
+    const p_frontRight = { x: GOAL_FRONT_X + GOAL_WIDTH, y: GOAL_FRONT_Y_TOP };
+    const p_bottomLeft = { x: GOAL_FRONT_X, y: GOAL_FRONT_Y_BOTTOM };
+    const p_bottomRight = { x: GOAL_FRONT_X + GOAL_WIDTH, y: GOAL_FRONT_Y_BOTTOM };
 
-        ctx.lineWidth = 5;
-        ctx.strokeStyle = `rgba(0, 255, 255, ${alpha * 1.5})`; // Ligne intérieure Cyan
-        ctx.stroke();
+    // Coins arrière (simulés avec une profondeur)
+    // AJUSTEMENT FINAL : Inclinaison subtile (X: 0.5) et hauteur visible (Y: 0.4).
+    const p_backLeft = { x: GOAL_FRONT_X + GOAL_DEPTH * 0.5, y: GOAL_FRONT_Y_TOP + GOAL_DEPTH * 0.4 };
+    const p_backRight = { x: GOAL_FRONT_X + GOAL_WIDTH - GOAL_DEPTH * 0.5, y: GOAL_FRONT_Y_TOP + GOAL_DEPTH * 0.4 };
+    const p_backBottomLeft = { x: GOAL_FRONT_X + GOAL_DEPTH * 0.5, y: GOAL_FRONT_Y_BOTTOM + GOAL_DEPTH * 0.4 };
+    const p_backBottomRight = { x: GOAL_FRONT_X + GOAL_WIDTH - GOAL_DEPTH * 0.5, y: GOAL_FRONT_Y_BOTTOM + GOAL_DEPTH * 0.4 };
 
-        ctx.shadowBlur = 0; 
-    }
-    
-    function drawRestingState() {
-        ctx.fillStyle = '#000';
-        ctx.fillRect(0, 0, W, H);
-
-        ctx.font = 'bold 60px Arial';
-        ctx.textAlign = 'center';
-        // Pulsation en Cyan Doux
-        const pulse = 0.3 + Math.sin(Date.now() * 0.005) * 0.1;
-        ctx.fillStyle = `rgba(0, 255, 255, ${pulse})`;
-        ctx.shadowColor = PRIMARY_COLOR;
-        ctx.shadowBlur = 10;
-        ctx.fillText(BLIXT_TEXT, W / 2, H / 2 + 20);
-        ctx.shadowBlur = 0;
-    }
-
-    // --- Fonctions de Phase ---
-
-    function drawLightningPhase() {
-        // État de l'éclair : PLEINE INTENSITÉ
-        drawRestingState(); 
-        drawLightningPath(1.5); // Toujours à fond
-
-        flashCounter++;
-        
-        // L'éclair ne reste que 2 trames d'animation (ultra-court)
-        if (flashCounter > 2) { 
-            flashCounter = 0;
-            phase = 2; // Passe à la pause noire immédiatement
-            flashStartTime = Date.now(); 
-        }
-    }
-
-    function drawBlackPause() {
-        ctx.fillStyle = '#000';
-        ctx.fillRect(0, 0, W, H);
-    }
-
-    function drawRevealPhase() {
-        ctx.fillStyle = '#000';
-        ctx.fillRect(0, 0, W, H);
-
-        // Logo BLIXT (Blanc Vif)
-        ctx.font = 'bold 60px Arial';
-        ctx.textAlign = 'center';
-        
-        ctx.fillStyle = `rgba(255, 255, 255, ${sloganAlpha})`;
-        ctx.shadowColor = PRIMARY_COLOR;
-        ctx.shadowBlur = 20 * sloganAlpha;
-        ctx.fillText(BLIXT_TEXT, W / 2, H / 2 - 10);
-
-        // Slogan (Cyan)
-        ctx.font = '24px Arial';
-        ctx.fillStyle = `rgba(0, 255, 255, ${sloganAlpha * 0.8})`; 
-        ctx.fillText(SLOGAN_TEXT, W / 2, H / 2 + 35);
-        ctx.shadowBlur = 0;
-        
-        sloganAlpha += 0.08; // Révélation rapide
-    }
+    const GOAL_GROUND_Y = H * 0.8; // Ligne du terrain (sous le but, pour l'impact)
 
 
-    // --- Moteur d'Animation ---
+    // --- Fonctions de Dessin ---
 
-    function animate() {
-        requestAnimationFrame(animate);
+    function drawScene() {
+        // Fond (Gazon Vert Nuit)
+        ctx.fillStyle = '#004d00'; 
+        ctx.fillRect(0, 0, W, H);
+        
+        // Cadre du But (Blanc) - Face avant
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
+        ctx.lineWidth = 5;
+        ctx.strokeRect(GOAL_FRONT_X, GOAL_FRONT_Y_TOP, GOAL_WIDTH, GOAL_HEIGHT);
 
-        switch(phase) {
-            case 0: 
-                drawRestingState();
-                break;
+        // Lignes de profondeur du cadre de but
+        ctx.beginPath();
+        ctx.moveTo(p_frontLeft.x, p_frontLeft.y); ctx.lineTo(p_backLeft.x, p_backLeft.y);
+        ctx.moveTo(p_frontRight.x, p_frontRight.y); ctx.lineTo(p_backRight.x, p_backRight.y);
+        ctx.moveTo(p_bottomLeft.x, p_bottomLeft.y); ctx.lineTo(p_backBottomLeft.x, p_backBottomLeft.y);
+        ctx.moveTo(p_bottomRight.x, p_bottomRight.y); ctx.lineTo(p_backBottomRight.x, p_backBottomRight.y);
+        ctx.stroke();
 
-            case 1: // Éclair : 2 trames de flash
-                drawLightningPhase();
-                break;
-            
-            case 2: // Pause Noire
-                drawBlackPause();
-                if (Date.now() - flashStartTime > PAUSE_DURATION) { 
-                    phase = 3; 
-                    sloganAlpha = 0; // Réinitialise l'opacité pour la révélation
-                }
-                break;
+        // Barre arrière du but
+        ctx.beginPath();
+        ctx.moveTo(p_backLeft.x, p_backLeft.y); ctx.lineTo(p_backRight.x, p_backRight.y);
+        ctx.moveTo(p_backBottomLeft.x, p_backBottomLeft.y); ctx.lineTo(p_backBottomRight.x, p_backBottomRight.y);
+        ctx.moveTo(p_backLeft.x, p_backLeft.y); ctx.lineTo(p_backBottomLeft.x, p_backBottomLeft.y);
+        ctx.moveTo(p_backRight.x, p_backRight.y); ctx.lineTo(p_backBottomRight.x, p_backBottomRight.y);
+        ctx.stroke();
 
-            case 3: // Révélation du Message
-                drawRevealPhase();
-                if (sloganAlpha >= 1) {
-                    sloganAlpha = 1;
-                    // Affichage pendant 3 secondes
-                    setTimeout(() => {
-                        phase = 0;
-                        flashCounter = 0;
-                    }, 3000); 
-                }
-                break;
-        }
-    }
 
-    animate();
+        // --- NOUVELLE LOGIQUE POUR LES FILETS (Lignes sur les barres) ---
+        ctx.strokeStyle = 'rgba(200, 200, 200, 0.4)'; // Plus transparent
+        ctx.lineWidth = 1;
+        const numVertLines = 15;
+        const numHorizLines = 10;
+        const vertSpacing = GOAL_WIDTH / (numVertLines + 1);
+        const horizSpacing = GOAL_HEIGHT / (numHorizLines + 1);
 
-    // Déclencheur
-    triggerButton.addEventListener('click', () => {
-        if (phase === 0) {
-            phase = 1;
-        }
-    });
+        // 1. Lignes Verticales (relient la barre supérieure à la barre inférieure)
+        for(let i = 1; i <= numVertLines; i++) {
+            const x = GOAL_FRONT_X + (i * vertSpacing);
+            
+            ctx.beginPath();
+            ctx.moveTo(x, p_frontLeft.y); // Part de la barre transversale
+            ctx.lineTo(x, p_bottomLeft.y); // Descend jusqu'à la ligne du sol du but
+            ctx.stroke();
+        }
 
+        // 2. Lignes Horizontales (relient les poteaux gauche et droit)
+        for(let i = 1; i <= numHorizLines; i++) {
+            const y = GOAL_FRONT_Y_TOP + (i * horizSpacing);
+            
+            ctx.beginPath();
+            ctx.moveTo(p_frontLeft.x, y); // Part du poteau gauche
+            ctx.lineTo(p_frontRight.x, y); // Va jusqu'au poteau droit
+            ctx.stroke();
+        }
+
+        // 3. Lignes de Profondeur Diagonales (lignes de structure, plus sombres)
+        ctx.strokeStyle = 'rgba(150, 150, 150, 0.3)';
+        // Filet gauche (diagonales)
+        ctx.beginPath();
+        ctx.moveTo(p_frontLeft.x, p_frontLeft.y);
+        ctx.lineTo(p_backLeft.x, p_backLeft.y);
+        ctx.moveTo(p_bottomLeft.x, p_bottomLeft.y);
+        ctx.lineTo(p_backBottomLeft.x, p_backBottomLeft.y);
+        ctx.stroke();
+
+        // Filet droit (diagonales)
+        ctx.beginPath();
+        ctx.moveTo(p_frontRight.x, p_frontRight.y);
+        ctx.lineTo(p_backRight.x, p_backRight.y);
+        ctx.moveTo(p_bottomRight.x, p_bottomRight.y);
+        ctx.lineTo(p_backBottomRight.x, p_backBottomRight.y);
+        ctx.stroke();
+
+        // Lignes du fond du filet pour l'arrière du but (horizontal et vertical)
+        ctx.strokeStyle = 'rgba(150, 150, 150, 0.3)';
+        const numBackLines = 10;
+        for(let i = 0; i <= numBackLines; i++) {
+            ctx.beginPath();
+            const y = p_backLeft.y + (i * (p_backBottomLeft.y - p_backLeft.y) / numBackLines);
+            ctx.moveTo(p_backLeft.x, y);
+            ctx.lineTo(p_backRight.x, y);
+            ctx.stroke();
+
+            ctx.beginPath();
+            const x = p_backLeft.x + (i * (p_backRight.x - p_backLeft.x) / numBackLines);
+            ctx.moveTo(x, p_backLeft.y);
+            ctx.lineTo(x, p_backBottomLeft.y);
+            ctx.stroke();
+        }
+        
+        // Ballon (noir et blanc) au centre des buts (au niveau de la barre du bas)
+        ctx.fillStyle = 'white';
+        ctx.beginPath();
+        // Position X: Centre du but | Position Y: Ligne du terrain (bas du but)
+        ctx.arc(GOAL_FRONT_X + GOAL_WIDTH / 2, p_bottomLeft.y, 25, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = 'black';
+        ctx.beginPath();
+        ctx.arc(GOAL_FRONT_X + GOAL_WIDTH / 2 - 9, p_bottomLeft.y - 5, 8, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Ligne blanche du terrain devant le but (alignée avec le bas des poteaux)
+        ctx.strokeStyle = 'white';
+        ctx.lineWidth = 9;
+        ctx.beginPath();
+        ctx.moveTo(0, GOAL_FRONT_Y_BOTTOM);
+        ctx.lineTo(W, GOAL_FRONT_Y_BOTTOM);
+        ctx.stroke();
+
+        // Ligne blanche du terrain (plus éloignée, pour la perspective)
+        ctx.beginPath();
+        ctx.moveTo(0, GOAL_GROUND_Y - 2);
+        ctx.lineTo(W, GOAL_GROUND_Y -2);
+        ctx.stroke();
+    }
+
+    function drawLightning(alpha) {
+        const center = { x: GOAL_FRONT_X + GOAL_WIDTH / 2, y: p_bottomLeft.y }; // Centre sur le ballon
+        
+        ctx.lineWidth = 20;
+        // Éclair principal : BLANC avec un grand halo CYAN
+        ctx.strokeStyle = `rgba(255, 255, 255, ${alpha})`; 
+        ctx.shadowColor = PRIMARY_COLOR; 
+        ctx.shadowBlur = 50 * alpha; 
+        
+        // Chemin de l'éclair (descend vers le ballon au centre)
+        ctx.beginPath();
+        ctx.moveTo(center.x, H * 0.1); 
+        ctx.lineTo(center.x + 20, H * 0.3);
+        ctx.lineTo(center.x - 10, H * 0.5);
+        ctx.lineTo(center.x + 10, H * 0.7);
+        ctx.lineTo(center.x, center.y); 
+        ctx.stroke();
+
+        // Ligne intérieure CYANE
+        ctx.lineWidth = 5;
+        ctx.strokeStyle = `rgba(0, 255, 255, ${alpha * 1.5})`; 
+        ctx.stroke();
+
+        ctx.shadowBlur = 0; 
+    }
+
+    function drawProjection(radius) {
+        const center = { x: GOAL_FRONT_X + GOAL_WIDTH / 2, y: p_bottomLeft.y };
+        
+        // Cercle de "projection" Blanc/Bleuté
+        ctx.fillStyle = `rgba(255, 255, 255, ${1 - radius / 150})`; // S'estompe en grandissant
+        ctx.shadowColor = PRIMARY_COLOR;
+        ctx.shadowBlur = 30;
+        
+        ctx.beginPath();
+        ctx.arc(center.x, center.y, radius, 0, Math.PI * 2);
+        ctx.fill();
+        
+        ctx.shadowBlur = 0;
+    }
+
+    function drawTextReveal(alpha) {
+        // Positionner le texte à droite du but (ajusté pour la nouvelle perspective)
+        const TEXT_X = W * 0.65;
+        const TEXT_Y_MAIN = H * 0.45;
+        
+        ctx.textAlign = 'left';
+        
+        // Texte BLIXT (Blanc)
+        ctx.font = 'bold 100px Arial';
+        ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
+        ctx.shadowColor = PRIMARY_COLOR;
+        ctx.shadowBlur = 30 * alpha;
+        ctx.fillText(TEXT_BLIXT, TEXT_X, TEXT_Y_MAIN);
+
+        // Texte Électricité générale (Cyan)
+        ctx.font = '30px Arial';
+        ctx.fillStyle = `rgba(0, 255, 255, ${alpha})`;
+        ctx.fillText(TEXT_SLOGAN, TEXT_X, TEXT_Y_MAIN + 40);
+
+        ctx.shadowBlur = 0;
+    }
+
+    // --- Moteur d'Animation (Inchangé) ---
+
+    function animate() {
+        requestAnimationFrame(animate);
+
+        drawScene(); // Dessine la scène de base à chaque trame
+
+        const elapsed = Date.now() - animationStartTime;
+
+        switch(phase) {
+            case 0: 
+                drawTextReveal(0.4); 
+                break;
+
+            case 1: 
+                if (elapsed < 100) { 
+                    lightningAlpha = 1;
+                    drawLightning(lightningAlpha);
+                    ctx.fillStyle = `rgba(255, 255, 255, ${0.5 + Math.random() * 0.5})`;
+                    ctx.fillRect(0, 0, W, H);
+                } else {
+                    phase = 2; 
+                }
+                break;
+            
+            case 2: 
+                projectionRadius += 25; 
+                drawProjection(projectionRadius);
+
+                if (projectionRadius > 200) {
+                    phase = 3;
+                    projectionRadius = 0; 
+                }
+                break;
+
+            case 3: 
+                textAlpha = Math.min(1, textAlpha + 0.05); 
+                drawTextReveal(textAlpha);
+                drawProjection(150); 
+                
+                if (textAlpha >= 1) {
+                    setTimeout(() => {
+                        phase = 0;
+                        textAlpha = 0.4;
+                    }, 4000); 
+                }
+                break;
+        }
+    }
+
+    animate();
+
+    // Déclencheur
+    document.getElementById('triggerBlixtAd').addEventListener('click', () => {
+        if (phase === 0) {
+            phase = 1;
+            animationStartTime = Date.now();
+        }
+    });
 </script>

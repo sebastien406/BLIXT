@@ -28,7 +28,6 @@ html {
 }
 
 body {
- 
     background-color: var(--main-bg-color);
     color: var(--text-color);
     line-height: 1.6;
@@ -90,6 +89,7 @@ p {
    
     
      body {
+        
         padding-top: 60px;
     }
     h1 {

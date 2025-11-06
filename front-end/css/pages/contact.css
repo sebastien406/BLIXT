@@ -142,6 +142,7 @@
 
 @media (max-width: 767px) {
    .entete-services {
+    width: 100%;
     padding: 30px 30px;
    }
    .grille-contact {
@@ -156,6 +157,7 @@
 .groupe-formulaires {
   padding: 10px 10px;
 }
+
 .btn-contact {
   margin: auto;
   }
@@ -173,6 +175,7 @@
     text-align: center;
     padding: 0 0 20px 0;
   }
+  
 }
 
 @media (min-width: 768px) {
@@ -180,6 +183,23 @@
     grid-template-columns: 2fr 1.5fr;
     gap: 80px;
     padding: 80px;
+  }
+}
+
+@media (max-width: 404px) {
+
+ .entete-services {
+  width: 395px;
+ } 
+.carte-formulaire {
+ margin: 0 30px 0 -5px;
+}
+
+.conteneur-carte {
+    margin: 0 30px 0 -20px;
+  }
+  .bande-appel-action {
+    width: 395px;
   }
 }
 
